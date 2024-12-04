@@ -15,6 +15,7 @@ import Sh_Home from "./pages/shopping-pages/Sh_Home";
 import Sh_Listing from "./pages/shopping-pages/Sh_Listing";
 import Sh_Checkout from "./pages/shopping-pages/Sh_Checkout";
 import Sh_Account from "./pages/shopping-pages/Sh_Account";
+import UnAuthPage from "./pages/unauth-pages/UnAuthPage";
 
 const Ecom = () => {
   return (
@@ -44,6 +45,9 @@ const Ecom = () => {
           <Route path="checkout" element={<Sh_Checkout />} />
           <Route path="account" element={<Sh_Account />} />
         </Route>
+
+        {/* un-auth page */}
+        <Route path="/unauth-page" element={<UnAuthPage />} />
 
         {/* --- not found route --- */}
         <Route path="*" element={<NotFound />} />
