@@ -1,7 +1,71 @@
-import React from "react";
+import AdminImageUpload from "@/components/admin-comps/AdminImageUpload";
+import CommonForm from "@/components/common-comps/CommonForm";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { addProductFormElements } from "@/config/data";
+import { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
 
+const initialFormData = {
+  image: null,
+  title: "",
+  description: "",
+  category: "",
+  brand: "",
+  price: "",
+  salePrice: "",
+  totalStock: "",
+  averageReview: 0,
+};
+
+// ------- Products component -------
 const Ad_Products = () => {
-  return <div>Products</div>;
+  const [openCreateProductsDialog, setOpenCreateProductsDialog] =
+    useState(false);
+  const [formData, setFormData] = useState(initialFormData);
+  const { loading } = useSelector((state) => state.common);
+
+  // handle create product
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    console.log(formData);
+  };
+  return (
+    <Fragment>
+      <div className="mb-5 w-full flex justify-end">
+        <Button onClick={() => setOpenCreateProductsDialog(true)}>
+          Add New Product
+        </Button>
+      </div>
+      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4"></div>
+      <Sheet
+        open={openCreateProductsDialog}
+        onOpenChange={() => setOpenCreateProductsDialog(false)}
+      >
+        <SheetContent side="right" className="overflow-auto">
+          <SheetHeader>
+            <SheetTitle>Add New Product</SheetTitle>
+          </SheetHeader>
+          <AdminImageUpload />
+          <div className="py-6">
+            <CommonForm
+              formControls={addProductFormElements}
+              formData={formData}
+              setFormData={setFormData}
+              buttonTxt={"Add"}
+              onSubmit={onSubmit}
+              isBtnDisabled={loading}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
+    </Fragment>
+  );
 };
 
 export default Ad_Products;

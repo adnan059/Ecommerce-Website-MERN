@@ -222,3 +222,11 @@ export const addressFormControls = [
     placeholder: "Enter any additional notes",
   },
 ];
+
+export const baseUrl = import.meta.env.VITE_BaseUrl;
+
+export const toastOptions = {
+  closeButton: true,
+  richColors: true,
+  duration: 2500,
+};

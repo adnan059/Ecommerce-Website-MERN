@@ -4,6 +4,11 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 // -----------------------------------
+
+const authRoutes = require("./routes/authRoutes");
+
+// -----------------------------------
+
 const PORT = process.env.PORT;
 const DB_URL = process.env.DB_URL;
 
@@ -46,6 +51,8 @@ app.get("/test", (req, res) => {
 });
 
 // -----------------------------------
+
+app.use("/api/auth", authRoutes);
 
 // -----------------------------------
 

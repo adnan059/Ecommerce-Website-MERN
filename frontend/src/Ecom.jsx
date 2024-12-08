@@ -5,7 +5,6 @@ import Login from "./pages/auth-pages/Login";
 import Register from "./pages/auth-pages/Register";
 import AdminRoute from "./components/admin-comps/AdminRoute";
 
-import ShoppingLayout from "./components/shopping-comps/ShoppingLayout";
 import NotFound from "./pages/not-found/NotFound";
 import Ad_Dashboard from "./pages/admin-pages/Ad_Dashboard";
 import Ad_Products from "./pages/admin-pages/Ad_Products";
@@ -16,6 +15,7 @@ import Sh_Listing from "./pages/shopping-pages/Sh_Listing";
 import Sh_Checkout from "./pages/shopping-pages/Sh_Checkout";
 import Sh_Account from "./pages/shopping-pages/Sh_Account";
 import UnAuthPage from "./pages/unauth-pages/UnAuthPage";
+import ProtectedRoute from "./components/auth-comps/ProtectedRoute";
 
 const Ecom = () => {
   return (
@@ -39,7 +39,7 @@ const Ecom = () => {
         </Route>
 
         {/* --- shopping routes --- */}
-        <Route path="/shop" element={<ShoppingLayout />}>
+        <Route path="/shop" element={<ProtectedRoute />}>
           <Route path="home" element={<Sh_Home />} />
           <Route path="listing" element={<Sh_Listing />} />
           <Route path="checkout" element={<Sh_Checkout />} />

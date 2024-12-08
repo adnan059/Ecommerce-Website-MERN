@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import Ecom from "./Ecom";
 
 import { persistor, store } from "./redux/store";
+import { Toaster } from "./components/ui/sonner";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
       <PersistGate persistor={persistor}>
         <BrowserRouter>
           <Ecom />
+          <Toaster />
         </BrowserRouter>
       </PersistGate>
     </Provider>
