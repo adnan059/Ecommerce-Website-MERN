@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 // -----------------------------------
 
 const authRoutes = require("./routes/authRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 // -----------------------------------
 
@@ -53,6 +54,7 @@ app.get("/test", (req, res) => {
 // -----------------------------------
 
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
 
 // -----------------------------------
 

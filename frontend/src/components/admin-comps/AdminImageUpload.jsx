@@ -1,11 +1,16 @@
 /* eslint-disable react/prop-types */
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { baseUrl } from "@/config/data";
+import { endLoading, startLoading } from "@/redux/commonSlice";
 
-// Component for Product Image Upload
+// ** Component for Product Image Upload **
 const AdminImageUpload = ({
   imageFile,
   setImageFile,
@@ -13,6 +18,9 @@ const AdminImageUpload = ({
   setUploadedImageUrl,
 }) => {
   const inputRef = useRef(null);
+  const { token } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
 
   // the function that handles the file change
   const handleImageFileChange = (event) => {
@@ -43,7 +51,41 @@ const AdminImageUpload = ({
     }
   };
 
-  // return the jsx
+  // function that handles the final upload
+  const uploadImageToCloudinary = async () => {
+    const data = new FormData();
+    data.append(
+      "my-file",
+      imageFile,
+      `${imageFile.name.slice(0, 5)}_${Date.now()}`
+    );
+
+    dispatch(startLoading());
+    try {
+      const response = await axios.post(
+        `${baseUrl}/products/upload-image`,
+        data,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log(response);
+
+      setUploadedImageUrl(response.data.result.url);
+
+      dispatch(endLoading());
+    } catch (error) {
+      console.log(error);
+      toast(error.response.data.message || "error occurred");
+      dispatch(endLoading());
+    }
+  };
+
+  // useEffect that controls the upload
+  useEffect(() => {
+    if (imageFile !== null) uploadImageToCloudinary();
+  }, [imageFile]);
+
+  // --------- return the jsx ----------
   return (
     <div className="w-full max-w-md mx-auto">
       <Label className="text-lg font-semibold mb-2 block">Upload Image</Label>
