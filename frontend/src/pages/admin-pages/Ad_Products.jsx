@@ -11,6 +11,7 @@ import { addProductFormElements } from "@/config/data";
 import { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
 
+// ------- initial state ----------
 const initialFormData = {
   image: null,
   title: "",
@@ -29,12 +30,16 @@ const Ad_Products = () => {
     useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const { loading } = useSelector((state) => state.common);
+  const [imageFile, setImageFile] = useState(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
 
-  // handle create product
+  // ---- handle create product ----
   const onSubmit = async (event) => {
     event.preventDefault();
     console.log(formData);
   };
+
+  // ------- return the jsx -----------
   return (
     <Fragment>
       <div className="mb-5 w-full flex justify-end">
@@ -51,8 +56,15 @@ const Ad_Products = () => {
           <SheetHeader>
             <SheetTitle>Add New Product</SheetTitle>
           </SheetHeader>
-          <AdminImageUpload />
+          {/* --- image upload section --- */}
+          <AdminImageUpload
+            imageFile={imageFile}
+            setImageFile={setImageFile}
+            uploadedImageUrl={uploadedImageUrl}
+            setUploadedImageUrl={setUploadedImageUrl}
+          />
           <div className="py-6">
+            {/* -- product upload form -- */}
             <CommonForm
               formControls={addProductFormElements}
               formData={formData}
