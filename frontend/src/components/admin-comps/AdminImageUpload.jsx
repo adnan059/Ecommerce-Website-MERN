@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { baseUrl } from "@/config/data";
 import { endLoading, startLoading } from "@/redux/commonSlice";
+import { Skeleton } from "../ui/skeleton";
+import useHandleApiError from "@/hooks/useHandleApiError";
 
 // ** Component for Product Image Upload **
 const AdminImageUpload = ({
@@ -19,8 +21,9 @@ const AdminImageUpload = ({
 }) => {
   const inputRef = useRef(null);
   const { token } = useSelector((state) => state.auth);
-
+  const { loading } = useSelector((state) => state.common);
   const dispatch = useDispatch();
+  const handleApiError = useHandleApiError();
 
   // the function that handles the file change
   const handleImageFileChange = (event) => {
@@ -74,8 +77,7 @@ const AdminImageUpload = ({
 
       dispatch(endLoading());
     } catch (error) {
-      console.log(error);
-      toast(error.response.data.message || "error occurred");
+      handleApiError(error);
       dispatch(endLoading());
     }
   };
@@ -109,6 +111,8 @@ const AdminImageUpload = ({
             <UploadCloudIcon className="w-10 h-10 text-muted-foreground mb-2" />
             <span>Drag & drop or click to upload image</span>
           </Label>
+        ) : loading ? (
+          <Skeleton className="h-10 bg-gray-100" />
         ) : (
           <div className="flex items-center justify-between">
             <div className="flex items-center">
