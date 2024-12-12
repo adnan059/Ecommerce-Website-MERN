@@ -6,9 +6,14 @@ export function cn(...inputs) {
 }
 
 export const isFormValid = (formData) => {
-  const isFormValid = Object.keys(formData)
-    .map((key) => formData[key] !== "")
+  const fields = Object.keys(formData).filter((field) => field !== "image");
+
+  const isValidForm = fields
+    .map((field) => formData[field] !== "")
     .every((item) => item);
 
-  return !isFormValid;
+  return !isValidForm;
 };
+
+export const noImagePic =
+  "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg";

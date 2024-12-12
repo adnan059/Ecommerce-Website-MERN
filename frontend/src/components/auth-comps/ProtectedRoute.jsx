@@ -1,4 +1,3 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import ShoppingLayout from "../shopping-comps/ShoppingLayout";
 import { Navigate, Outlet } from "react-router-dom";

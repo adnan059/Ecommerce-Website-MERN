@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import PublicRoute from "./components/auth-comps/PublicRoute";
 import Login from "./pages/auth-pages/Login";
@@ -20,7 +19,6 @@ import ProtectedRoute from "./components/auth-comps/ProtectedRoute";
 const Ecom = () => {
   return (
     <div className="flex flex-col overflow-hidden bg-white">
-      <h1>Header Component</h1>
       <Routes>
         <Route path="/" element={<h1>Home</h1>} />
 

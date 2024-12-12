@@ -134,7 +134,7 @@ const Ad_Products = () => {
               setFormData={setFormData}
               buttonTxt={currentEditedId ? "Edit" : "Add"}
               onSubmit={onSubmit}
-              isBtnDisabled={loading || isFormValid(formData)}
+              isBtnDisabled={isFormValid(formData) || loading}
             />
           </div>
         </SheetContent>

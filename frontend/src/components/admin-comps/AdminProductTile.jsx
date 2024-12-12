@@ -8,6 +8,7 @@ import { setProductList } from "@/redux/adminSlice";
 import { Fragment, useState } from "react";
 
 import DeleteConfirmation from "../common-comps/DeleteConfirmation";
+import { noImagePic } from "@/lib/utils";
 
 /* eslint-disable react/prop-types */
 const AdminProductTile = ({
@@ -45,7 +46,7 @@ const AdminProductTile = ({
         <div>
           <div className="relative">
             <img
-              src={product?.image}
+              src={product?.image || noImagePic}
               alt={product?.title}
               className="w-full h-[300px] object-cover rounded-t-lg"
             />
