@@ -18,6 +18,7 @@ const AdminImageUpload = ({
   setImageFile,
   uploadedImageUrl,
   setUploadedImageUrl,
+  isEditMode,
 }) => {
   const inputRef = useRef(null);
   const { token } = useSelector((state) => state.auth);
@@ -97,6 +98,7 @@ const AdminImageUpload = ({
         className=" border-2 border-dashed rounded-lg p-4"
       >
         <Input
+          disabled={isEditMode}
           type="file"
           id="image-upload"
           className="hidden"
@@ -106,7 +108,9 @@ const AdminImageUpload = ({
         {!imageFile ? (
           <Label
             htmlFor="image-upload"
-            className=" flex flex-col items-center justify-center h-32 cursor-pointer"
+            className={`flex flex-col items-center justify-center h-32 cursor-pointer ${
+              isEditMode ? "cursor-not-allowed" : ""
+            }`}
           >
             <UploadCloudIcon className="w-10 h-10 text-muted-foreground mb-2" />
             <span>Drag & drop or click to upload image</span>

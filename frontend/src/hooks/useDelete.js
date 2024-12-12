@@ -1,28 +1,22 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useDispatch, useSelector } from "react-redux";
-
 import useHandleApiError from "./useHandleApiError";
 import { endLoading, startLoading } from "@/redux/commonSlice";
 import axios from "axios";
 import { baseUrl } from "@/config/data";
-import { useEffect, useState } from "react";
 
-const useFetch = (url) => {
+const useDelete = () => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.common);
   const handleApiError = useHandleApiError();
-  const [data, setData] = useState([]);
   const { token } = useSelector((state) => state.auth);
 
-  const refetchData = async () => {
+  const deleteData = async (url, id) => {
     dispatch(startLoading());
     try {
-      const response = await axios(`${baseUrl}/${url}`, {
+      const response = await axios.delete(`${baseUrl}/${url}/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
       dispatch(endLoading());
       return response;
     } catch (error) {
@@ -31,15 +25,7 @@ const useFetch = (url) => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await refetchData();
-      setData(response?.data);
-    };
-    fetchData();
-  }, [url, token]);
-
-  return { refetchData, data, loading };
+  return deleteData;
 };
 
-export default useFetch;
+export default useDelete;
