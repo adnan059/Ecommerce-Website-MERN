@@ -1,5 +1,5 @@
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
-import React from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
@@ -18,10 +18,15 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutAction } from "@/redux/authSlice";
 
 const MenuItems = () => {
+  const navigate = useNavigate();
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Label className="text-sm font-medium cursor-pointer" key={menuItem.id}>
+        <Label
+          onClick={() => navigate(menuItem?.path)}
+          className="text-sm font-medium cursor-pointer"
+          key={menuItem.id}
+        >
           {menuItem.label}
         </Label>
       ))}
@@ -45,7 +50,7 @@ const HeaderRightContent = () => {
         <DropdownMenuTrigger asChild>
           <Avatar className="bg-black">
             <AvatarFallback className="bg-black text-white font-extrabold">
-              {user?.userName[0]}
+              {user?.userName[0].toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
@@ -91,11 +96,10 @@ const ShoppingHeader = () => {
         <div className="hidden lg:block">
           <MenuItems />
         </div>
-        {user && (
-          <div className="hidden lg:block">
-            <HeaderRightContent />
-          </div>
-        )}
+
+        <div className="hidden lg:block">
+          <HeaderRightContent />
+        </div>
       </div>
     </header>
   );
