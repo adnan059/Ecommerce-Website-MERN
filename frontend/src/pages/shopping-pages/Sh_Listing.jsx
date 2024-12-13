@@ -1,4 +1,15 @@
 import ShoppingProductFilter from "@/components/shopping-comps/ShoppingProductFilter";
+import ShoppingProductTile from "@/components/shopping-comps/ShoppingProductTile";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { sortOptions } from "@/config/data";
+import { ArrowUpDownIcon } from "lucide-react";
 import { useSelector } from "react-redux";
 
 const Sh_Listing = () => {
@@ -14,7 +25,39 @@ const Sh_Listing = () => {
             <span className="text-muted-foreground">
               {productList?.length} Products
             </span>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                >
+                  <ArrowUpDownIcon className="h-4 w-4" />
+                  <span>Sort by</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[200px]">
+                <DropdownMenuRadioGroup>
+                  {sortOptions.map((sortItem) => (
+                    <DropdownMenuRadioItem
+                      value={sortItem.id}
+                      key={sortItem.id}
+                    >
+                      {sortItem.label}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          {productList && productList.length > 0
+            ? productList.map((productItem, i) => (
+                <ShoppingProductTile key={i} />
+              ))
+            : null}
         </div>
       </div>
     </div>
