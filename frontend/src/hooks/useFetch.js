@@ -7,7 +7,7 @@ import axios from "axios";
 import { baseUrl } from "@/config/data";
 import { useEffect, useState } from "react";
 
-const useFetch = (url, filterParams, sortParams) => {
+const useFetch = (url = "") => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.common);
   const handleApiError = useHandleApiError();
@@ -36,7 +36,7 @@ const useFetch = (url, filterParams, sortParams) => {
       const response = await refetchData(url);
       setData(response?.data);
     };
-    fetchData();
+    url && fetchData();
   }, [url, token]);
 
   return { refetchData, data, loading };

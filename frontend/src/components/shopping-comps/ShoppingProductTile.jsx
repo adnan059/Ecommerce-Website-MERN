@@ -3,13 +3,23 @@ import { Badge } from "../ui/badge";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
 import { noImagePic } from "@/lib/utils";
+import useFetch from "@/hooks/useFetch";
+import { useDispatch, useSelector } from "react-redux";
+import { setProductDetails } from "@/redux/shopSlice";
 
 /* eslint-disable react/prop-types */
-const ShoppingProductTile = ({
-  product,
-  handleAddtoCart,
-  handleGetProductDetails,
-}) => {
+const ShoppingProductTile = ({ product }) => {
+  const { sh_productDetails } = useSelector((state) => state.shop);
+  const dispatch = useDispatch();
+  const { refetchData } = useFetch();
+  const handleAddtoCart = (id, totalStock) => {
+    console.log(id, totalStock);
+  };
+  const handleGetProductDetails = async (id) => {
+    const response = await refetchData(`shop/products/${id}`);
+    dispatch(setProductDetails({ data: response?.data }));
+  };
+
   return (
     <Card className="w-full max-w-sm mx-auto">
       <div onClick={() => handleGetProductDetails(product?._id)}>

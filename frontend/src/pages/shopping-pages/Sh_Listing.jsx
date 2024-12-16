@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import ShoppingProductFilter from "@/components/shopping-comps/ShoppingProductFilter";
 import ShoppingProductTile from "@/components/shopping-comps/ShoppingProductTile";
 import { Button } from "@/components/ui/button";
@@ -89,7 +90,12 @@ const Sh_Listing = () => {
     setFilters(cpyFilters);
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
   };
-  //console.log(searchParams);
+
+  if (loading) {
+    return (
+      <h1 className="text-center text-3xl font-bold mt-10">Loading ...</h1>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -129,11 +135,13 @@ const Sh_Listing = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-          {sh_productList && sh_productList.length > 0
-            ? sh_productList.map((productItem, i) => (
-                <ShoppingProductTile key={i} product={productItem} />
-              ))
-            : null}
+          {sh_productList && sh_productList.length > 0 ? (
+            sh_productList.map((productItem, i) => (
+              <ShoppingProductTile key={i} product={productItem} />
+            ))
+          ) : (
+            <h1 className="text-center text-lg">No Products Found</h1>
+          )}
         </div>
       </div>
     </div>

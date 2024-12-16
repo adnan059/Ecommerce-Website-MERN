@@ -1,5 +1,6 @@
 const Product = require("../../models/Product");
 
+// get products based on filters
 const getFilteredProducts = async (req, res, next) => {
   try {
     const { category = [], brand = [], sortBy = "price-lowtohigh" } = req.query;
@@ -43,6 +44,18 @@ const getFilteredProducts = async (req, res, next) => {
   }
 };
 
+// fetch single product by id
+const getProductDetails = async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    res.status(200).json(product);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getFilteredProducts,
+  getProductDetails,
 };
