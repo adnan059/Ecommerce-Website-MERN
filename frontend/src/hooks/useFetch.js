@@ -7,17 +7,17 @@ import axios from "axios";
 import { baseUrl } from "@/config/data";
 import { useEffect, useState } from "react";
 
-const useFetch = (url) => {
+const useFetch = (url, filterParams, sortParams) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.common);
   const handleApiError = useHandleApiError();
   const [data, setData] = useState([]);
   const { token } = useSelector((state) => state.auth);
 
-  const refetchData = async () => {
+  const refetchData = async (url = "", query) => {
     dispatch(startLoading());
     try {
-      const response = await axios(`${baseUrl}/${url}`, {
+      const response = await axios(`${baseUrl}/${url}?${query}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -33,7 +33,7 @@ const useFetch = (url) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await refetchData();
+      const response = await refetchData(url);
       setData(response?.data);
     };
     fetchData();

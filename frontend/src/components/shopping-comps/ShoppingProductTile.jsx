@@ -2,6 +2,7 @@ import { brandOptionsMap, categoryOptionsMap } from "@/config/data";
 import { Badge } from "../ui/badge";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
+import { noImagePic } from "@/lib/utils";
 
 /* eslint-disable react/prop-types */
 const ShoppingProductTile = ({
@@ -14,7 +15,7 @@ const ShoppingProductTile = ({
       <div onClick={() => handleGetProductDetails(product?._id)}>
         <div className="relative">
           <img
-            src={product?.image}
+            src={product?.image || noImagePic}
             alt={product?.title}
             className="w-full h-[300px] object-cover rounded-t-lg"
           />
