@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import ShoppingProductDetails from "@/components/shopping-comps/ShoppingProductDetails";
 import ShoppingProductFilter from "@/components/shopping-comps/ShoppingProductFilter";
 import ShoppingProductTile from "@/components/shopping-comps/ShoppingProductTile";
 import { Button } from "@/components/ui/button";
@@ -19,13 +20,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
 const Sh_Listing = () => {
-  const { sh_productList } = useSelector((state) => state.shop);
+  const { sh_productList, sh_productDetails } = useSelector(
+    (state) => state.shop
+  );
   const { loading, data, refetchData } = useFetch(`shop/products`);
   const dispatch = useDispatch();
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const categorySearchParam = searchParams.get("category");
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   // useeffect 1
   useEffect(() => {
@@ -144,6 +148,11 @@ const Sh_Listing = () => {
           )}
         </div>
       </div>
+      <ShoppingProductDetails
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={sh_productDetails}
+      />
     </div>
   );
 };

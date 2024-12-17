@@ -1,20 +1,49 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { noImagePic } from "@/lib/utils";
-import { Dialog, DialogContent } from "../ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setProductDetails } from "@/redux/shopSlice";
+
+const reviews = [
+  {
+    userName: "robin",
+  },
+  { userName: "peter" },
+];
 
 const ShoppingProductDetails = ({ open, setOpen, productDetails }) => {
-  const reviews = [1, 2, 3, 4];
+  const dispatch = useDispatch();
+
   const handleAddToCart = () => {};
+
+  const handleDialogClose = (event) => {
+    if (event) {
+      event.preventDefault();
+    }
+
+    dispatch(setProductDetails({ data: null }));
+
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    if (productDetails !== null) {
+      setOpen(true);
+    }
+  }, [productDetails]);
 
   // return the jsx
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
+        <DialogTitle className="sr-only">Product Details</DialogTitle>
         <div className="relative overflow-hidden rounded-lg">
           <img
             src={productDetails?.image || noImagePic}
