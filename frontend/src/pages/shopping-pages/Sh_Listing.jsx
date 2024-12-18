@@ -95,11 +95,11 @@ const Sh_Listing = () => {
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
   };
 
-  if (loading) {
-    return (
-      <h1 className="text-center text-3xl font-bold mt-10">Loading ...</h1>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <h1 className="text-center text-3xl font-bold mt-10">Loading ...</h1>
+  //   );
+  // }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">

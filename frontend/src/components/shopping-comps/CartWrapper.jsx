@@ -3,9 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import UserCartItemsContent from "./CartItemsContent";
+import { useSelector } from "react-redux";
 
-const UserCartWrapper = ({ setOpenCartSheet, cartItems }) => {
+const UserCartWrapper = ({ setOpenCartSheet }) => {
   const navigate = useNavigate();
+
+  const { cartItems } = useSelector((state) => state.cart);
+
+  console.log(cartItems);
   const totalCartAmount = "56.6";
   return (
     <SheetContent className="sm:max-w-md">
@@ -14,8 +19,8 @@ const UserCartWrapper = ({ setOpenCartSheet, cartItems }) => {
       </SheetHeader>
       <div className="mt-8 space-y-4">
         {cartItems && cartItems.length > 0
-          ? cartItems.map((item) => (
-              <UserCartItemsContent cartItem={item} key={item?._id} />
+          ? cartItems?.map((item) => (
+              <UserCartItemsContent cartItem={item} key={Math.random()} />
             ))
           : null}
       </div>

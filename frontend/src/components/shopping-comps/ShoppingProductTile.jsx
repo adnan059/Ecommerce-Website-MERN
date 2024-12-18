@@ -4,23 +4,39 @@ import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
 import { noImagePic } from "@/lib/utils";
 import useFetch from "@/hooks/useFetch";
-import { useDispatch } from "react-redux";
-import { setProductDetails } from "@/redux/shopSlice";
+import { useDispatch, useSelector } from "react-redux";
+
+import usePost from "@/hooks/usePost";
+import { setCartItems } from "@/redux/cartSlice";
 
 /* eslint-disable react/prop-types */
 const ShoppingProductTile = ({ product }) => {
-  const dispatch = useDispatch();
   const { refetchData } = useFetch();
+  const { loading, postData } = usePost();
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   // adding products to cart
-  const handleAddtoCart = (id, totalStock) => {
-    console.log(id, totalStock);
+  const handleAddtoCart = async (id, totalStock) => {
+    await postData(`cart/add`, {
+      userId: user?._id,
+      productId: id,
+      quantity: 1,
+    });
+
+    const response = await refetchData(`cart/get/${user?._id}`);
+    console.log(response.data.items);
+    dispatch(setCartItems({ data: response?.data?.items }));
   };
+
   // getting and setting product details
   const handleGetProductDetails = async (id) => {
     const response = await refetchData(`shop/products/${id}`);
-    dispatch(setProductDetails({ data: response?.data }));
+    // dispatch(setProductDetails({ data: response?.data }));
+    console.log(response?.data);
   };
+
+  // console.log(cartItems);
 
   return (
     <Card className="w-full max-w-sm mx-auto">
@@ -81,6 +97,7 @@ const ShoppingProductTile = ({ product }) => {
           <Button
             onClick={() => handleAddtoCart(product?._id, product?.totalStock)}
             className="w-full"
+            disabled={loading}
           >
             Add to cart
           </Button>
