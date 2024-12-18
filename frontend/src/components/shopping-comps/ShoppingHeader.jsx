@@ -16,6 +16,8 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutAction } from "@/redux/authSlice";
+import { useState } from "react";
+import UserCartWrapper from "./CartWrapper";
 
 const MenuItems = () => {
   const navigate = useNavigate();
@@ -38,13 +40,20 @@ const HeaderRightContent = () => {
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [openCartSheet, setOpenCartSheet] = useState(false);
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-      <Sheet>
-        <Button variant="outline" size="icon" className="relative">
+      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+        <Button
+          onClick={() => setOpenCartSheet(true)}
+          variant="outline"
+          size="icon"
+          className="relative"
+        >
           <ShoppingCart className="w-6 h-6" />
           <span className="sr-only">user cart</span>
         </Button>
+        <UserCartWrapper setOpenCartSheet={setOpenCartSheet} />
       </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

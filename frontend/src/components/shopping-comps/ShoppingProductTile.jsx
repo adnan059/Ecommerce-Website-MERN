@@ -11,9 +11,12 @@ import { setProductDetails } from "@/redux/shopSlice";
 const ShoppingProductTile = ({ product }) => {
   const dispatch = useDispatch();
   const { refetchData } = useFetch();
+
+  // adding products to cart
   const handleAddtoCart = (id, totalStock) => {
     console.log(id, totalStock);
   };
+  // getting and setting product details
   const handleGetProductDetails = async (id) => {
     const response = await refetchData(`shop/products/${id}`);
     dispatch(setProductDetails({ data: response?.data }));
