@@ -1,4 +1,8 @@
-import { brandOptionsMap, categoryOptionsMap } from "@/config/data";
+import {
+  brandOptionsMap,
+  categoryOptionsMap,
+  toastOptions,
+} from "@/config/data";
 import { Badge } from "../ui/badge";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
@@ -8,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import usePost from "@/hooks/usePost";
 import { setCartItems } from "@/redux/cartSlice";
+import { toast } from "sonner";
 
 /* eslint-disable react/prop-types */
 const ShoppingProductTile = ({ product }) => {
@@ -27,6 +32,7 @@ const ShoppingProductTile = ({ product }) => {
     const response = await refetchData(`cart/get/${user?._id}`);
     console.log(response.data.items);
     dispatch(setCartItems({ data: response?.data?.items }));
+    toast.success("product is added to the cart", toastOptions);
   };
 
   // getting and setting product details

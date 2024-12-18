@@ -9,10 +9,10 @@ const useDelete = () => {
   const handleApiError = useHandleApiError();
   const { token } = useSelector((state) => state.auth);
 
-  const deleteData = async (url, id) => {
+  const deleteData = async (url) => {
     dispatch(startLoading());
     try {
-      const response = await axios.delete(`${baseUrl}/${url}/${id}`, {
+      const response = await axios.delete(`${baseUrl}/${url}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

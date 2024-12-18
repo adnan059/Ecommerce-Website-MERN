@@ -10,10 +10,10 @@ const usePut = () => {
   const { token } = useSelector((state) => state.auth);
   const handleApiError = useHandleApiError();
 
-  const updateData = async (url, id, data) => {
+  const updateData = async (url, data) => {
     dispatch(startLoading());
     try {
-      const response = await axios.put(`${baseUrl}/${url}/${id}`, data, {
+      const response = await axios.put(`${baseUrl}/${url}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

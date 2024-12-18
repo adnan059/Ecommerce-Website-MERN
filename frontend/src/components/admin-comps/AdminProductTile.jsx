@@ -24,7 +24,7 @@ const AdminProductTile = ({
 
   // --- handle product delete ---
   const deleteProduct = async () => {
-    const response = await deleteData("products/delete", product?._id);
+    const response = await deleteData(`products/delete/${product?._id}`);
 
     const { data } = response;
 

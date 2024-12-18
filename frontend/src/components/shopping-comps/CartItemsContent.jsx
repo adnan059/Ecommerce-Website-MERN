@@ -1,13 +1,50 @@
 /* eslint-disable react/prop-types */
 import { Minus, Plus, Trash } from "lucide-react";
 import { Button } from "../ui/button";
+import useDelete from "@/hooks/useDelete";
+import { useDispatch, useSelector } from "react-redux";
+import { setCartItems } from "@/redux/cartSlice";
+import { toast } from "sonner";
+import { toastOptions } from "@/config/data";
+import usePut from "@/hooks/usePut";
 
 const UserCartItemsContent = ({ cartItem }) => {
-  const handleUpdateQuantity = (cartItem) => {
+  const { cartItems } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
+  const { updateData } = usePut();
+  const deleteData = useDelete();
+  const dispatch = useDispatch();
+
+  // function to handle the quantity update
+  const handleUpdateQuantity = async (cartItem, typeOfchange) => {
     console.log(cartItem);
+    const { data } = await updateData(`cart/update`, {
+      userId: user?._id,
+      productId: cartItem?.productId,
+      quantity:
+        typeOfchange === "plus"
+          ? cartItem?.quantity + 1
+          : cartItem?.quantity - 1,
+    });
+    if (data.success) {
+      dispatch(setCartItems({ data: data?.items }));
+    }
+    return;
   };
 
-  const handleCartItemDelete = () => {};
+  // function to handle the cart item delete
+  const handleCartItemDelete = async (cartItem) => {
+    console.log(cartItem);
+    const response = await deleteData(
+      `cart/${user?._id}/${cartItem?.productId}`
+    );
+    const { data } = response;
+    if (data.success) {
+      dispatch(setCartItems({ data: data.items }));
+      toast.success("product removed from the cart", toastOptions);
+    }
+    return;
+  };
   return (
     <div className="flex items-center space-x-4">
       <img

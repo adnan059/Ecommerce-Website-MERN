@@ -10,8 +10,18 @@ const UserCartWrapper = ({ setOpenCartSheet }) => {
 
   const { cartItems } = useSelector((state) => state.cart);
 
-  console.log(cartItems);
-  const totalCartAmount = "56.6";
+  const totalCartAmount =
+    cartItems && cartItems.length > 0
+      ? cartItems.reduce((total, currentItem) => {
+          return (
+            total +
+            (currentItem?.salePrice > 0
+              ? currentItem?.salePrice
+              : currentItem?.price) *
+              currentItem?.quantity
+          );
+        }, 0)
+      : 0;
   return (
     <SheetContent className="sm:max-w-md">
       <SheetHeader>

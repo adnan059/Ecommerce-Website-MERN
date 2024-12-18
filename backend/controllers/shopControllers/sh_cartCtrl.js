@@ -121,7 +121,9 @@ const updateCartItemQty = async (req, res, next) => {
       quantity: item.quantity,
     }));
 
-    res.status(200).json({ ...cart._doc, items: populateCartItems });
+    res
+      .status(200)
+      .json({ ...cart._doc, items: populateCartItems, success: true });
   } catch (error) {
     next(error);
   }
@@ -164,7 +166,9 @@ const deleteCartItem = async (req, res, next) => {
       salePrice: item.productId ? item.productId.salePrice : null,
     }));
 
-    res.status(200).json({ ...cart._doc, items: populateCartItems });
+    res
+      .status(200)
+      .json({ ...cart._doc, items: populateCartItems, success: true });
   } catch (error) {
     next(error);
   }
