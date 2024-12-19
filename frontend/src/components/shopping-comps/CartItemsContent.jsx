@@ -17,7 +17,6 @@ const UserCartItemsContent = ({ cartItem }) => {
 
   // function to handle the quantity update
   const handleUpdateQuantity = async (cartItem, typeOfchange) => {
-    console.log(cartItem);
     const { data } = await updateData(`cart/update`, {
       userId: user?._id,
       productId: cartItem?.productId,
@@ -34,7 +33,6 @@ const UserCartItemsContent = ({ cartItem }) => {
 
   // function to handle the cart item delete
   const handleCartItemDelete = async (cartItem) => {
-    console.log(cartItem);
     const response = await deleteData(
       `cart/${user?._id}/${cartItem?.productId}`
     );

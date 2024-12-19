@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import usePost from "@/hooks/usePost";
 import { setCartItems } from "@/redux/cartSlice";
 import { toast } from "sonner";
+import { setProductDetails } from "@/redux/shopSlice";
 
 /* eslint-disable react/prop-types */
 const ShoppingProductTile = ({ product }) => {
@@ -20,9 +21,31 @@ const ShoppingProductTile = ({ product }) => {
   const { loading, postData } = usePost();
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const { cartItems } = useSelector((state) => state.cart);
 
   // adding products to cart
   const handleAddtoCart = async (id, totalStock) => {
+    console.log(cartItems);
+
+    if (cartItems.length) {
+      const indexOfCurrentItem = cartItems.findIndex(
+        (item) => item.productId === id
+      );
+
+      if (indexOfCurrentItem > -1) {
+        const qty = cartItems[indexOfCurrentItem].quantity;
+
+        if (qty + 1 > totalStock) {
+          toast.warning(
+            `Only ${qty} quantity can be added for this item`,
+            toastOptions
+          );
+
+          return;
+        }
+      }
+    }
+
     await postData(`cart/add`, {
       userId: user?._id,
       productId: id,
@@ -30,7 +53,7 @@ const ShoppingProductTile = ({ product }) => {
     });
 
     const response = await refetchData(`cart/get/${user?._id}`);
-    console.log(response.data.items);
+
     dispatch(setCartItems({ data: response?.data?.items }));
     toast.success("product is added to the cart", toastOptions);
   };
@@ -38,11 +61,8 @@ const ShoppingProductTile = ({ product }) => {
   // getting and setting product details
   const handleGetProductDetails = async (id) => {
     const response = await refetchData(`shop/products/${id}`);
-    // dispatch(setProductDetails({ data: response?.data }));
-    console.log(response?.data);
+    dispatch(setProductDetails({ data: response?.data }));
   };
-
-  // console.log(cartItems);
 
   return (
     <Card className="w-full max-w-sm mx-auto">

@@ -8,8 +8,13 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setProductDetails } from "@/redux/shopSlice";
+import usePost from "@/hooks/usePost";
+import useFetch from "@/hooks/useFetch";
+import { setCartItems } from "@/redux/cartSlice";
+import { toast } from "sonner";
+import { toastOptions } from "@/config/data";
 
 const reviews = [
   {
@@ -20,9 +25,45 @@ const reviews = [
 
 const ShoppingProductDetails = ({ open, setOpen, productDetails }) => {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { postData } = usePost();
+  const { refetchData } = useFetch();
+  const { cartItems } = useSelector((state) => state.cart);
 
-  const handleAddToCart = () => {};
+  // adding product to the cart
+  const handleAddToCart = async (id, totalStock) => {
+    if (cartItems.length) {
+      const indexOfCurrentItem = cartItems.findIndex(
+        (item) => item.productId === id
+      );
 
+      if (indexOfCurrentItem > -1) {
+        const qty = cartItems[indexOfCurrentItem].quantity;
+
+        if (qty + 1 > totalStock) {
+          toast.warning(
+            `Only ${qty} quantity can be added for this item`,
+            toastOptions
+          );
+
+          return;
+        }
+      }
+    }
+
+    await postData(`cart/add`, {
+      userId: user?._id,
+      productId: id,
+      quantity: 1,
+    });
+
+    const response = await refetchData(`cart/get/${user?._id}`);
+
+    dispatch(setCartItems({ data: response?.data?.items }));
+    toast.success("product is added to the cart", toastOptions);
+  };
+
+  // close the product details dialog
   const handleDialogClose = (event) => {
     if (event) {
       event.preventDefault();
@@ -33,6 +74,7 @@ const ShoppingProductDetails = ({ open, setOpen, productDetails }) => {
     setOpen(false);
   };
 
+  // opening the product details dialog
   useEffect(() => {
     if (productDetails !== null) {
       setOpen(true);
