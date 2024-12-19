@@ -14,7 +14,7 @@ const useFetch = (url = "") => {
   const [data, setData] = useState([]);
   const { token } = useSelector((state) => state.auth);
 
-  const refetchData = async (url = "", query) => {
+  const refetchData = async (url = "", query = "") => {
     dispatch(startLoading());
     try {
       const response = await axios(`${baseUrl}/${url}?${query}`, {
