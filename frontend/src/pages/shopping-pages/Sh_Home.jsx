@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import { setAllFilteredProducts } from "@/redux/shopSlice";
 import ShoppingProductDetails from "@/components/shopping-comps/ShoppingProductDetails";
+import { useNavigate } from "react-router-dom";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -53,6 +54,7 @@ const Sh_Home = () => {
   const { refetchData } = useFetch();
   const dispatch = useDispatch();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const navigate = useNavigate();
 
   // useeffect for fetching pordict list
   useEffect(() => {
@@ -78,7 +80,14 @@ const Sh_Home = () => {
     if (sh_productDetails !== null) setOpenDetailsDialog(true);
   }, [sh_productDetails]);
 
-  const handleNavigateToListingPage = () => {};
+  const handleNavigateToListingPage = (currentItem, section) => {
+    sessionStorage.removeItem("filters");
+    const currentFilter = {
+      [section]: [currentItem.id],
+    };
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate("/shop/listing");
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
