@@ -1,22 +1,56 @@
 /* eslint-disable react/prop-types */
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Label } from "../ui/label";
 import { Fragment, useState } from "react";
 import DeleteConfirmation from "../common-comps/DeleteConfirmation";
+import useDelete from "@/hooks/useDelete";
+import { setAddressList } from "@/redux/addressSlice";
+import { toast } from "sonner";
+import { toastOptions } from "@/config/data";
 
-const AddressCard = ({ addressInfo }) => {
+const AddressCard = ({
+  addressInfo,
+  setFormData,
+  setCurrentEditedId,
+  formData,
+}) => {
   const { addressList } = useSelector((state) => state.address);
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const deleteData = useDelete();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const handleDeleteAddress = () => {
-    console.log(addressInfo);
+  const handleDeleteAddress = async () => {
+    const response = await deleteData(
+      `address/delete/${user?._id}/${addressInfo?._id}`
+    );
+
+    if (response.data.success) {
+      const newAddressList = addressList.filter(
+        (addressItem) =>
+          addressItem._id.toString() !== addressInfo._id.toString()
+      );
+
+      dispatch(setAddressList({ data: newAddressList }));
+
+      toast.success(response.data.message, toastOptions);
+    }
+    return;
   };
 
-  const handleEditAddress = (id) => {
-    console.log(id);
+  const handleEditAddress = async (addressInfo) => {
+    setCurrentEditedId(addressInfo?._id);
+    setFormData({
+      ...formData,
+      address: addressInfo?.address,
+      city: addressInfo?.city,
+      phone: addressInfo?.phone,
+      pincode: addressInfo?.pincode,
+      notes: addressInfo?.notes,
+    });
   };
   return (
     <Fragment>
@@ -29,9 +63,10 @@ const AddressCard = ({ addressInfo }) => {
           <Label>Notes: {addressInfo?.notes}</Label>
         </CardContent>
         <CardFooter className="p-3 flex justify-between">
-          <Button onClick={() => handleEditAddress(addressInfo?._id)}>
-            Edit
-          </Button>
+          <a href="#addressform">
+            <Button onClick={() => handleEditAddress(addressInfo)}>Edit</Button>
+          </a>
+
           <Button onClick={() => setIsDeleteDialogOpen(true)}>Delete</Button>
         </CardFooter>
       </Card>

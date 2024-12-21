@@ -8,6 +8,7 @@ import { addressFormControls } from "@/config/data";
 import usePost from "@/hooks/usePost";
 import { setAddressList } from "@/redux/addressSlice";
 import useFetch from "@/hooks/useFetch";
+import usePut from "@/hooks/usePut";
 
 const initialAddressFormData = {
   address: "",
@@ -25,6 +26,8 @@ const ShoppingAddress = () => {
   const { postData } = usePost();
   const { addressList } = useSelector((state) => state.address);
   const { data } = useFetch(`address/get/${user?._id}`);
+  const [currentEditedId, setCurrentEditedId] = useState(null);
+  const { updateData } = usePut();
 
   useEffect(() => {
     dispatch(setAddressList({ data: data }));
@@ -32,38 +35,62 @@ const ShoppingAddress = () => {
 
   const handleManageAddress = async (event) => {
     event.preventDefault();
-    const response = await postData(`address/add`, {
-      ...formData,
-      userId: user?._id,
-    });
+    const response = currentEditedId
+      ? await updateData(
+          `address/update/${user?._id}/${currentEditedId}`,
+          formData
+        )
+      : await postData(`address/add`, {
+          ...formData,
+          userId: user?._id,
+        });
+
+    const { data } = response;
+
+    let updatedAddressList = addressList.filter(
+      (item) => item._id.toString() !== data._id.toString()
+    );
 
     dispatch(
-      setAddressList({ data: [...new Set([...addressList, response?.data])] })
+      setAddressList({
+        data: [...new Set([...updatedAddressList, response?.data])],
+      })
     );
+    setCurrentEditedId(null);
+    setFormData(initialAddressFormData);
   };
-
-  console.log(addressList);
 
   return (
     <Card>
       <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2  gap-2">
         {addressList && addressList.length > 0
           ? addressList.map((addressItem) => (
-              <AddressCard key={addressItem?._id} addressInfo={addressItem} />
+              <AddressCard
+                key={addressItem?._id}
+                addressInfo={addressItem}
+                setFormData={setFormData}
+                setCurrentEditedId={setCurrentEditedId}
+                formData={formData}
+              />
             ))
           : null}
       </div>
       <CardHeader>
-        <CardTitle>Add new Address</CardTitle>
+        <CardTitle>
+          {`${currentEditedId ? "Edit The " : "Add New "}`}Address
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <CommonForm
-          formControls={addressFormControls}
-          formData={formData}
-          setFormData={setFormData}
-          onSubmit={handleManageAddress}
-          isBtnDisabled={isFormValid(formData) || loading}
-        />
+        <div id="addressform">
+          <CommonForm
+            formControls={addressFormControls}
+            formData={formData}
+            setFormData={setFormData}
+            onSubmit={handleManageAddress}
+            isBtnDisabled={isFormValid(formData) || loading}
+            buttonTxt={currentEditedId ? "Edit" : "Create"}
+          />
+        </div>
       </CardContent>
     </Card>
   );

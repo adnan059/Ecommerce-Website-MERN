@@ -50,7 +50,7 @@ const updateAddress = async (req, res, next) => {
       { new: true }
     );
 
-    res.status(200).json({ success: true, data: updatedAddress });
+    res.status(200).json(updatedAddress);
   } catch (error) {
     next(error);
   }
