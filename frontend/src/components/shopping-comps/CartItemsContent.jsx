@@ -9,7 +9,6 @@ import { toastOptions } from "@/config/data";
 import usePut from "@/hooks/usePut";
 
 const UserCartItemsContent = ({ cartItem }) => {
-  const { cartItems } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
   const { updateData } = usePut();
   const deleteData = useDelete();

@@ -4,11 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import AddressCard from "./AddressCard";
 import CommonForm from "../common-comps/CommonForm";
 import { isFormValid } from "@/lib/utils";
-import { addressFormControls } from "@/config/data";
+import { addressFormControls, toastOptions } from "@/config/data";
 import usePost from "@/hooks/usePost";
 import { setAddressList } from "@/redux/addressSlice";
 import useFetch from "@/hooks/useFetch";
 import usePut from "@/hooks/usePut";
+import { toast } from "sonner";
 
 const initialAddressFormData = {
   address: "",
@@ -35,6 +36,10 @@ const ShoppingAddress = () => {
 
   const handleManageAddress = async (event) => {
     event.preventDefault();
+    if (addressList.length >= 3 && currentEditedId === null) {
+      toast.warning("you cannot add more than three addresses", toastOptions);
+      return;
+    }
     const response = currentEditedId
       ? await updateData(
           `address/update/${user?._id}/${currentEditedId}`,
@@ -55,6 +60,14 @@ const ShoppingAddress = () => {
       setAddressList({
         data: [...new Set([...updatedAddressList, response?.data])],
       })
+    );
+    toast.success(
+      `${
+        currentEditedId
+          ? "address edited successfully"
+          : "address created successfully"
+      }`,
+      toastOptions
     );
     setCurrentEditedId(null);
     setFormData(initialAddressFormData);

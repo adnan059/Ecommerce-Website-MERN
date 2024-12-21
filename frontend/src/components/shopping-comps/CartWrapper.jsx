@@ -4,6 +4,8 @@ import { Button } from "../ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import UserCartItemsContent from "./CartItemsContent";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
+import { toastOptions } from "@/config/data";
 
 const UserCartWrapper = ({ setOpenCartSheet }) => {
   const navigate = useNavigate();
@@ -42,8 +44,13 @@ const UserCartWrapper = ({ setOpenCartSheet }) => {
       </div>
       <Button
         onClick={() => {
-          navigate("/shop/checkout");
-          setOpenCartSheet(false);
+          if (cartItems.length > 0) {
+            navigate("/shop/checkout");
+            setOpenCartSheet(false);
+          } else {
+            toast.warning("the cart is empty", toastOptions);
+            setOpenCartSheet(false);
+          }
         }}
         className="w-full mt-6"
       >
