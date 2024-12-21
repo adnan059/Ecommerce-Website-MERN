@@ -20,7 +20,7 @@ const AdminProductTile = ({
   const { productList } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   const deleteData = useDelete();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   // --- handle product delete ---
   const deleteProduct = async () => {
@@ -77,14 +77,15 @@ const AdminProductTile = ({
             >
               Edit
             </Button>
-            <Button onClick={() => setIsDialogOpen(true)}>Delete</Button>
+            <Button onClick={() => setIsDeleteDialogOpen(true)}>Delete</Button>
           </CardFooter>
         </div>
       </Card>
       <DeleteConfirmation
-        isDialogOpen={isDialogOpen}
-        setIsDialogOpen={setIsDialogOpen}
-        deleteProduct={deleteProduct}
+        isDialogOpen={isDeleteDialogOpen}
+        setIsDialogOpen={setIsDeleteDialogOpen}
+        deleteItem={deleteProduct}
+        itemCategory="product"
       />
     </Fragment>
   );

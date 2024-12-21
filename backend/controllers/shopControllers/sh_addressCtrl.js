@@ -3,6 +3,7 @@ const createError = require("../../utils/createError");
 
 // create new address
 const addAddress = async (req, res, next) => {
+  // console.log(req.body);
   try {
     const { userId, address, city, pincode, phone, notes } = req.body;
 

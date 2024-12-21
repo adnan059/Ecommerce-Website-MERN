@@ -10,22 +10,26 @@ import {
 import { Button } from "../ui/button";
 
 const DeleteConfirmation = ({
-  isDialogOpen,
-  setIsDialogOpen,
-  deleteProduct,
+  isDeleteDialogOpen,
+  setIsDeleteDialogOpen,
+  deleteItem,
+  itemCategory,
 }) => {
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Confirm Delete</DialogTitle>
         </DialogHeader>
-        <p>Do you really want to delete this product?</p>
+        <p>{`Do you really want to delete this ${itemCategory}?`}</p>
         <DialogFooter>
-          <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => setIsDeleteDialogOpen(false)}
+          >
             Cancel
           </Button>
-          <Button variant="destructive" onClick={deleteProduct}>
+          <Button variant="destructive" onClick={deleteItem}>
             Yes, Delete
           </Button>
         </DialogFooter>
