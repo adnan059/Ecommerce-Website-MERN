@@ -1,38 +1,50 @@
+/* eslint-disable react/prop-types */
+import { useSelector } from "react-redux";
 import { Badge } from "../ui/badge";
 import { DialogContent } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
+import CommonForm from "../common-comps/CommonForm";
+import { useState } from "react";
+
+const initialFormData = {
+  status: "",
+};
 
 const AdminOrderDetails = ({ orderDetails }) => {
+  const [formData, setFormData] = useState(initialFormData);
+  const { user } = useSelector((state) => state.auth);
+
+  const handleUpdateStatus = (event) => {
+    event.preventDefault();
+  };
   return (
     <DialogContent className="sm:max-w-[600px]">
       <div className="grid gap-6">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">
             <p className="font-medium">Order ID</p>
-            <Label>{orderDetails?._id || "fsd"}</Label>
+            <Label>{orderDetails?._id}</Label>
           </div>
 
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Date</p>
-            <Label>
-              {orderDetails?.orderDate.split("T")[0] || "22-05-2024"}
-            </Label>
+            <Label>{orderDetails?.orderDate.split("T")[0]}</Label>
           </div>
 
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Price</p>
-            <Label>${orderDetails?.totalAmount || 367}</Label>
+            <Label>${orderDetails?.totalAmount}</Label>
           </div>
 
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Payment method</p>
-            <Label>{orderDetails?.paymentMethod || "paypal"}</Label>
+            <Label>{orderDetails?.paymentMethod}</Label>
           </div>
 
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Payment Status</p>
-            <Label>{orderDetails?.paymentStatus || "confirmed"}</Label>
+            <Label>{orderDetails?.paymentStatus}</Label>
           </div>
 
           <div className="flex mt-2 items-center justify-between">
@@ -47,7 +59,7 @@ const AdminOrderDetails = ({ orderDetails }) => {
                     : "bg-black"
                 }`}
               >
-                {orderDetails?.orderStatus || "confirmed"}
+                {orderDetails?.orderStatus}
               </Badge>
             </Label>
           </div>
@@ -71,6 +83,42 @@ const AdminOrderDetails = ({ orderDetails }) => {
                 : null}
             </ul>
           </div>
+        </div>
+        <div className="grid gap-4">
+          <div className="grid gap-2">
+            <div className="font-medium">Shipping Info</div>
+            <div className="grid gap-0.5 text-muted-foreground">
+              <span>{user?.userName}</span>
+              <span>{orderDetails?.addressInfo?.address}</span>
+              <span>{orderDetails?.addressInfo?.city}</span>
+              <span>{orderDetails?.addressInfo?.pincode}</span>
+              <span>{orderDetails?.addressInfo?.phone}</span>
+              <span>{orderDetails?.addressInfo?.notes}</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <CommonForm
+            formControls={[
+              {
+                label: "Order Status",
+                name: "status",
+                componentType: "select",
+                options: [
+                  { id: "pending", label: "Pending" },
+                  { id: "inProcess", label: "In Process" },
+                  { id: "inShipping", label: "In Shipping" },
+                  { id: "delivered", label: "Delivered" },
+                  { id: "rejected", label: "Rejected" },
+                ],
+              },
+            ]}
+            formData={formData}
+            setFormData={setFormData}
+            buttonText={"Update Order Status"}
+            onSubmit={handleUpdateStatus}
+          />
         </div>
       </div>
     </DialogContent>

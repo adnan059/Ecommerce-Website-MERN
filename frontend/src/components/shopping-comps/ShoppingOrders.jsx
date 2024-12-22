@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -12,6 +12,8 @@ import {
   TableRow,
 } from "../ui/table";
 import ShoppingOrderDetails from "./ShoppingOrderDetails";
+import { useDispatch, useSelector } from "react-redux";
+import { setOrderDetails } from "@/redux/adminSlice";
 
 const ShoppingOrders = () => {
   const orderList = [
@@ -29,8 +31,18 @@ const ShoppingOrders = () => {
     },
   ];
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const { orderDetails } = useSelector((state) => state.admin);
 
-  const handleFetchOrderDetails = () => {};
+  const dispatch = useDispatch();
+
+  const manageOrderDetails = (orderDetails) => {
+    console.log(orderDetails);
+    dispatch(setOrderDetails({ data: orderDetails }));
+  };
+  useEffect(() => {
+    orderDetails !== null && setOpenDetailsDialog(true);
+  }, [orderDetails]);
+
   return (
     <Card>
       <CardHeader>
@@ -75,16 +87,13 @@ const ShoppingOrders = () => {
                         open={openDetailsDialog}
                         onOpenChange={() => {
                           setOpenDetailsDialog(false);
+                          dispatch(setOrderDetails({ data: null }));
                         }}
                       >
-                        <Button
-                          onClick={() =>
-                            handleFetchOrderDetails(orderItem?._id)
-                          }
-                        >
+                        <Button onClick={() => manageOrderDetails(orderItem)}>
                           View Details
                         </Button>
-                        <ShoppingOrderDetails />
+                        <ShoppingOrderDetails orderDetails={orderDetails} />
                       </Dialog>
                     </TableCell>
                   </TableRow>

@@ -12,7 +12,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { setOrderDetails } from "@/redux/adminSlice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const Ad_Orders = () => {
   const orderList = [
@@ -29,8 +31,17 @@ const Ad_Orders = () => {
       totalAmount: 367,
     },
   ];
+  const { orderDetails } = useSelector((state) => state.admin);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-  const handleFetchOrderDetails = () => {};
+  const dispatch = useDispatch();
+
+  const manageOrderDetails = (orderDetails) => {
+    console.log(orderDetails);
+    dispatch(setOrderDetails({ data: orderDetails }));
+  };
+  useEffect(() => {
+    orderDetails !== null && setOpenDetailsDialog(true);
+  }, [orderDetails]);
   return (
     <Card>
       <CardHeader>
@@ -75,16 +86,13 @@ const Ad_Orders = () => {
                         open={openDetailsDialog}
                         onOpenChange={() => {
                           setOpenDetailsDialog(false);
+                          dispatch(setOrderDetails({ data: null }));
                         }}
                       >
-                        <Button
-                          onClick={() =>
-                            handleFetchOrderDetails(orderItem?._id)
-                          }
-                        >
+                        <Button onClick={() => manageOrderDetails(orderItem)}>
                           View Details
                         </Button>
-                        <AdminOrderDetails />
+                        <AdminOrderDetails orderDetails={orderDetails} />
                       </Dialog>
                     </TableCell>
                   </TableRow>
