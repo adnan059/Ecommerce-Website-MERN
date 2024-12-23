@@ -36,3 +36,7 @@ const orderSchema = new mongoose.Schema(
 const Order = mongoose.model("Order", orderSchema);
 
 module.exports = Order;
+
+// paypal business email: sb-a9shx29731964@business.example.com
+
+// paypal business email pswd: QYa=c8:n
