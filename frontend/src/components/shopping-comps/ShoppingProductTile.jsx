@@ -54,7 +54,9 @@ const ShoppingProductTile = ({ product }) => {
 
     const response = await refetchData(`cart/get/${user?._id}`);
 
-    dispatch(setCartItems({ data: response?.data?.items }));
+    dispatch(
+      setCartItems({ data: response?.data?.items, cartId: response?.data?._id })
+    );
     toast.success("product is added to the cart", toastOptions);
   };
 
@@ -64,6 +66,7 @@ const ShoppingProductTile = ({ product }) => {
     dispatch(setProductDetails({ data: response?.data }));
   };
 
+  // return the jsx
   return (
     <Card className="w-full max-w-sm mx-auto">
       <div onClick={() => handleGetProductDetails(product?._id)}>

@@ -15,6 +15,7 @@ const AddressCard = ({
   setFormData,
   setCurrentEditedId,
   formData,
+  setCurrentSelectedAddress,
 }) => {
   const { addressList } = useSelector((state) => state.address);
   const { user } = useSelector((state) => state.auth);
@@ -54,7 +55,13 @@ const AddressCard = ({
   };
   return (
     <Fragment>
-      <Card>
+      <Card
+        onClick={
+          setCurrentSelectedAddress
+            ? () => setCurrentSelectedAddress(addressInfo)
+            : null
+        }
+      >
         <CardContent className="grid p-4 gap-4">
           <Label>Address: {addressInfo?.address}</Label>
           <Label>City: {addressInfo?.city}</Label>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -19,7 +20,7 @@ const initialAddressFormData = {
   notes: "",
 };
 
-const ShoppingAddress = () => {
+const ShoppingAddress = ({ setCurrentSelectedAddress }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const { loading } = useSelector((state) => state.common);
   const { user } = useSelector((state) => state.auth);
@@ -84,6 +85,7 @@ const ShoppingAddress = () => {
                 setFormData={setFormData}
                 setCurrentEditedId={setCurrentEditedId}
                 formData={formData}
+                setCurrentSelectedAddress={setCurrentSelectedAddress}
               />
             ))
           : null}

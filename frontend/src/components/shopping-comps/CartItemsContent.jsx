@@ -25,7 +25,7 @@ const UserCartItemsContent = ({ cartItem }) => {
           : cartItem?.quantity - 1,
     });
     if (data.success) {
-      dispatch(setCartItems({ data: data?.items }));
+      dispatch(setCartItems({ data: data?.items, cartId: data?._id }));
     }
     return;
   };
@@ -37,7 +37,7 @@ const UserCartItemsContent = ({ cartItem }) => {
     );
     const { data } = response;
     if (data.success) {
-      dispatch(setCartItems({ data: data.items }));
+      dispatch(setCartItems({ data: data.items, cartId: data?._id }));
       toast.success("product removed from the cart", toastOptions);
     }
     return;

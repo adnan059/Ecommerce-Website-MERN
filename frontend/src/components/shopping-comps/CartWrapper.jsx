@@ -12,6 +12,7 @@ const UserCartWrapper = ({ setOpenCartSheet }) => {
 
   const { cartItems } = useSelector((state) => state.cart);
 
+  // calculating the total amount
   const totalCartAmount =
     cartItems && cartItems.length > 0
       ? cartItems.reduce((total, currentItem) => {
@@ -25,6 +26,7 @@ const UserCartWrapper = ({ setOpenCartSheet }) => {
         }, 0)
       : 0;
 
+  // return the jsx
   return (
     <SheetContent className="sm:max-w-md">
       <SheetHeader>
