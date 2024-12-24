@@ -3,7 +3,7 @@ import img from "../../assets/account.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import UserCartItemsContent from "@/components/shopping-comps/CartItemsContent";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { toastOptions } from "@/config/data";
 import usePost from "@/hooks/usePost";
@@ -92,11 +92,9 @@ const Sh_Checkout = () => {
     }
   };
 
-  useEffect(() => {
-    if (approvalURL) {
-      window.location.href = approvalURL;
-    }
-  }, [approvalURL]);
+  if (approvalURL) {
+    window.location.href = approvalURL;
+  }
 
   return (
     <div className="flex flex-col">

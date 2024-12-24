@@ -1,4 +1,6 @@
+const Cart = require("../../models/Cart");
 const Order = require("../../models/Order");
+const Product = require("../../models/Product");
 const createError = require("../../utils/createError");
 const { paypal } = require("../../utils/helpers");
 
@@ -91,8 +93,43 @@ const createOrder = async (req, res, next) => {
 };
 
 // capture a payment
-const capturePayment = (req, res, next) => {
+const capturePayment = async (req, res, next) => {
   try {
+    const { paymentId, payerId, orderId } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return next(createError(404, "order can not be found"));
+    }
+    order.paymentStatus = "paid";
+    order.orderStatus = "confirmed";
+    order.paymentId = paymentId;
+    order.payerId = payerId;
+
+    for (let item of order.cartItems) {
+      let product = await Product.findById(item.productId);
+
+      if (!product) {
+        return next(
+          createError(404, `Not enough stock for this product ${product.title}`)
+        );
+      }
+
+      product.totalStock -= item.quantity;
+
+      await product.save();
+    }
+
+    const cartId = order.cartId;
+
+    await Cart.findByIdAndDelete(cartId);
+
+    await order.save();
+
+    res.status(200).json({
+      success: true,
+      message: "order confirmed",
+      data: order,
+    });
   } catch (error) {
     next(error);
   }

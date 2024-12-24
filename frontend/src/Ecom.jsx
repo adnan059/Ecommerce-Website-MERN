@@ -15,6 +15,7 @@ import Sh_Checkout from "./pages/shopping-pages/Sh_Checkout";
 import Sh_Account from "./pages/shopping-pages/Sh_Account";
 import UnAuthPage from "./pages/unauth-pages/UnAuthPage";
 import ProtectedRoute from "./components/auth-comps/ProtectedRoute";
+import Sh_PaypalReturn from "./pages/shopping-pages/Sh_PaypalReturn";
 
 const Ecom = () => {
   return (
@@ -42,6 +43,7 @@ const Ecom = () => {
           <Route path="listing" element={<Sh_Listing />} />
           <Route path="checkout" element={<Sh_Checkout />} />
           <Route path="account" element={<Sh_Account />} />
+          <Route path="paypal-return" element={<Sh_PaypalReturn />} />
         </Route>
 
         {/* un-auth page */}
