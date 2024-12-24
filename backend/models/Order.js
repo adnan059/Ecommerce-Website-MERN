@@ -40,3 +40,7 @@ module.exports = Order;
 // paypal business email: sb-a9shx29731964@business.example.com
 
 // paypal business email pswd: QYa=c8:n
+
+// personal email: sb-fea5i29731969@personal.example.com
+
+// personal email pswd: Rj#fYD?6
