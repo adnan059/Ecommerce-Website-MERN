@@ -66,7 +66,7 @@ const ShoppingOrderDetails = ({ orderDetails }) => {
                     >
                       <span>Title: {item.title}</span>
                       <span>Quantity: {item.quantity}</span>
-                      <span>Price: ${item.price}</span>
+                      <span>Price: ${item.price} per unit</span>
                     </li>
                   ))
                 : null}

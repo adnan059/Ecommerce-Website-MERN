@@ -135,7 +135,29 @@ const capturePayment = async (req, res, next) => {
   }
 };
 
+// get all orders for an user
+const getOrdersByUser = async (req, res, next) => {
+  try {
+    const orders = await Order.find({ userId: req.params.userId });
+    res.status(200).json(orders);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// get details of an order
+const getOrderDetails = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    res.status(200).json(order);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createOrder,
   capturePayment,
+  getOrdersByUser,
+  getOrderDetails,
 };

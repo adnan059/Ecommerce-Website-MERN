@@ -3,7 +3,7 @@ import img from "../../assets/account.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import UserCartItemsContent from "@/components/shopping-comps/CartItemsContent";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { toastOptions } from "@/config/data";
 import usePost from "@/hooks/usePost";
@@ -92,9 +92,12 @@ const Sh_Checkout = () => {
     }
   };
 
-  if (approvalURL) {
-    window.location.href = approvalURL;
-  }
+  // redirecting to approval url
+  useEffect(() => {
+    if (approvalURL) {
+      window.location.href = approvalURL;
+    }
+  }, [approvalURL]);
 
   return (
     <div className="flex flex-col">
@@ -118,7 +121,11 @@ const Sh_Checkout = () => {
             </div>
           </div>
           <div className="mt-4 w-full">
-            <Button onClick={handleInitiatePaypalPayment} className="w-full">
+            <Button
+              disabled={cartItems.length > 0 ? false : true}
+              onClick={handleInitiatePaypalPayment}
+              className="w-full"
+            >
               {isPaymentStart
                 ? "Processing Paypal Payment..."
                 : "Checkout with Paypal"}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Dialog } from "../ui/dialog";
+import { Dialog, DialogTitle } from "../ui/dialog";
 import {
   Table,
   TableBody,
@@ -13,35 +13,26 @@ import {
 } from "../ui/table";
 import ShoppingOrderDetails from "./ShoppingOrderDetails";
 import { useDispatch, useSelector } from "react-redux";
-import { setOrderDetails } from "@/redux/adminSlice";
+import useFetch from "@/hooks/useFetch";
+import { setShoppingOrderDetails } from "@/redux/shoppingOrderSlice";
 
 const ShoppingOrders = () => {
-  const orderList = [
-    {
-      _id: "sdfs",
-      orderStatus: "rejected",
-      orderDate: "22-05-2024T25642",
-      totalAmount: 253,
-    },
-    {
-      _id: "xcvert",
-      orderStatus: "confirmed",
-      orderDate: "17-09-2024T25642",
-      totalAmount: 367,
-    },
-  ];
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-  const { orderDetails } = useSelector((state) => state.admin);
+  const { sh_orderDetails } = useSelector((state) => state.shoppingOrder);
+  const { user } = useSelector((state) => state.auth);
+  const { data: orderList } = useFetch(`order/list/${user?._id}`);
 
   const dispatch = useDispatch();
 
+  // setting order details
   const manageOrderDetails = (orderDetails) => {
-    console.log(orderDetails);
-    dispatch(setOrderDetails({ data: orderDetails }));
+    dispatch(setShoppingOrderDetails({ data: orderDetails }));
   };
+
+  // opening the order details dialog
   useEffect(() => {
-    orderDetails !== null && setOpenDetailsDialog(true);
-  }, [orderDetails]);
+    sh_orderDetails !== null && setOpenDetailsDialog(true);
+  }, [sh_orderDetails]);
 
   return (
     <Card>
@@ -87,13 +78,16 @@ const ShoppingOrders = () => {
                         open={openDetailsDialog}
                         onOpenChange={() => {
                           setOpenDetailsDialog(false);
-                          dispatch(setOrderDetails({ data: null }));
+                          dispatch(setShoppingOrderDetails({ data: null }));
                         }}
                       >
+                        <DialogTitle className="sr-only">
+                          Order details
+                        </DialogTitle>
                         <Button onClick={() => manageOrderDetails(orderItem)}>
                           View Details
                         </Button>
-                        <ShoppingOrderDetails orderDetails={orderDetails} />
+                        <ShoppingOrderDetails orderDetails={sh_orderDetails} />
                       </Dialog>
                     </TableCell>
                   </TableRow>
