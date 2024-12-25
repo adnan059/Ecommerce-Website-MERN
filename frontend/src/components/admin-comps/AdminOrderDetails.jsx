@@ -1,25 +1,47 @@
 /* eslint-disable react/prop-types */
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "../ui/badge";
-import { DialogContent } from "../ui/dialog";
+import { DialogContent, DialogTitle } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import CommonForm from "../common-comps/CommonForm";
 import { useState } from "react";
+import usePut from "@/hooks/usePut";
+import { setOrderDetails } from "@/redux/adminSlice";
+import { toast } from "sonner";
 
 const initialFormData = {
-  status: "",
+  orderStatus: "",
 };
 
-const AdminOrderDetails = ({ orderDetails }) => {
+const AdminOrderDetails = () => {
+  const { orderDetails } = useSelector((state) => state.admin);
   const [formData, setFormData] = useState(initialFormData);
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-  const handleUpdateStatus = (event) => {
+  const { updateData } = usePut();
+
+  const handleUpdateStatus = async (event) => {
     event.preventDefault();
+
+    const response = await updateData(
+      `order/update/${orderDetails?._id}`,
+      formData
+    );
+
+    console.log(response);
+    if (response?.data?.succees) {
+      dispatch(setOrderDetails({ data: response?.data?.orderDetails }));
+
+      toast(response?.data?.mesage);
+    }
+
+    return;
   };
   return (
     <DialogContent className="sm:max-w-[600px]">
+      <DialogTitle className="sr-only">Order details</DialogTitle>
       <div className="grid gap-6">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">
@@ -103,12 +125,12 @@ const AdminOrderDetails = ({ orderDetails }) => {
             formControls={[
               {
                 label: "Order Status",
-                name: "status",
+                name: "orderStatus",
                 componentType: "select",
                 options: [
                   { id: "pending", label: "Pending" },
-                  { id: "inProcess", label: "In Process" },
-                  { id: "inShipping", label: "In Shipping" },
+                  { id: "in_process", label: "In Process" },
+                  { id: "in_shipping", label: "In Shipping" },
                   { id: "delivered", label: "Delivered" },
                   { id: "rejected", label: "Rejected" },
                 ],
