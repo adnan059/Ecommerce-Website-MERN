@@ -4,6 +4,7 @@ const commonSlice = createSlice({
   name: "common",
   initialState: {
     loading: false,
+    searchResults: [],
   },
   reducers: {
     startLoading: (state) => {
@@ -12,9 +13,13 @@ const commonSlice = createSlice({
     endLoading: (state) => {
       state.loading = false;
     },
+    setSearchResults: (state, action) => {
+      state.searchResults = action.payload.searchResults;
+    },
   },
 });
 
-export const { startLoading, endLoading } = commonSlice.actions;
+export const { startLoading, endLoading, setSearchResults } =
+  commonSlice.actions;
 
 export default commonSlice.reducer;
