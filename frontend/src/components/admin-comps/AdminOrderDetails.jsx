@@ -7,15 +7,15 @@ import { Separator } from "../ui/separator";
 import CommonForm from "../common-comps/CommonForm";
 import { useState } from "react";
 import usePut from "@/hooks/usePut";
-import { setOrderDetails } from "@/redux/adminSlice";
+import { setOrderDetails, setOrderList } from "@/redux/adminSlice";
 import { toast } from "sonner";
 
 const initialFormData = {
   orderStatus: "",
 };
 
-const AdminOrderDetails = () => {
-  const { orderDetails } = useSelector((state) => state.admin);
+const AdminOrderDetails = ({ onDialogOpenChange }) => {
+  const { orderDetails, orderList } = useSelector((state) => state.admin);
   const [formData, setFormData] = useState(initialFormData);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -30,15 +30,29 @@ const AdminOrderDetails = () => {
       formData
     );
 
-    console.log(response);
     if (response?.data?.succees) {
       dispatch(setOrderDetails({ data: response?.data?.orderDetails }));
-
-      toast(response?.data?.mesage);
     }
+
+    const { orderId } = response.data;
+
+    const orderStatus = response?.data?.orderDetails?.orderStatus;
+
+    const newOrderList = orderList.map((singleOrder) => {
+      if (singleOrder?._id === orderId) {
+        singleOrder = { ...singleOrder, orderStatus: orderStatus };
+      }
+      return singleOrder;
+    });
+
+    dispatch(setOrderList({ data: newOrderList }));
+    onDialogOpenChange();
+
+    toast(response?.data?.mesage);
 
     return;
   };
+
   return (
     <DialogContent className="sm:max-w-[600px]">
       <DialogTitle className="sr-only">Order details</DialogTitle>

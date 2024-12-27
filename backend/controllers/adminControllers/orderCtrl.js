@@ -24,6 +24,7 @@ const updateOrderStatus = async (req, res, next) => {
       success: true,
       message: "order is updated successfully",
       orderDetails: updatedOrder,
+      orderId: req.params.id,
     });
   } catch (error) {
     next(error);

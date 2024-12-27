@@ -38,6 +38,11 @@ const Ad_Orders = () => {
     dispatch(setOrderDetails({ data: orderDetails }));
   };
 
+  const onDialogOpenChange = () => {
+    setOpenDetailsDialog(false);
+    dispatch(setOrderDetails({ data: null }));
+  };
+
   //useeffect to open the order details dialog
   useEffect(() => {
     orderDetails !== null && setOpenDetailsDialog(true);
@@ -86,15 +91,14 @@ const Ad_Orders = () => {
                     <TableCell>
                       <Dialog
                         open={openDetailsDialog}
-                        onOpenChange={() => {
-                          setOpenDetailsDialog(false);
-                          dispatch(setOrderDetails({ data: null }));
-                        }}
+                        onOpenChange={onDialogOpenChange}
                       >
                         <Button onClick={() => manageOrderDetails(orderItem)}>
                           View Details
                         </Button>
-                        <AdminOrderDetails />
+                        <AdminOrderDetails
+                          onDialogOpenChange={onDialogOpenChange}
+                        />
                       </Dialog>
                     </TableCell>
                   </TableRow>

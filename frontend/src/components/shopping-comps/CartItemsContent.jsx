@@ -13,9 +13,28 @@ const UserCartItemsContent = ({ cartItem }) => {
   const { updateData } = usePut();
   const deleteData = useDelete();
   const dispatch = useDispatch();
+  const { sh_productList } = useSelector((state) => state.shop);
+
+  //console.log(sh_productList);
 
   // function to handle the quantity update
   const handleUpdateQuantity = async (cartItem, typeOfchange) => {
+    if (typeOfchange === "plus") {
+      const { productId, quantity } = cartItem;
+
+      const totalStock = sh_productList?.filter(
+        (item) => item._id === productId
+      )[0].totalStock;
+
+      if (quantity + 1 > totalStock) {
+        toast.warning(
+          `Only ${quantity} quantity can be added for this item`,
+          toastOptions
+        );
+        return;
+      }
+    }
+
     const { data } = await updateData(`cart/update`, {
       userId: user?._id,
       productId: cartItem?.productId,
@@ -42,6 +61,8 @@ const UserCartItemsContent = ({ cartItem }) => {
     }
     return;
   };
+
+  // ------- return the jsx ----------
   return (
     <div className="flex items-center space-x-4">
       <img

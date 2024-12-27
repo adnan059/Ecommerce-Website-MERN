@@ -23,7 +23,7 @@ const Sh_Listing = () => {
   const { sh_productList, sh_productDetails } = useSelector(
     (state) => state.shop
   );
-  const { loading, data, refetchData } = useFetch(`shop/products`);
+  const { data, refetchData } = useFetch(`shop/products`);
   const dispatch = useDispatch();
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
