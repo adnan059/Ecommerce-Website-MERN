@@ -7,7 +7,7 @@ import { Separator } from "../ui/separator";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setProductDetails } from "@/redux/shopSlice";
 import usePost from "@/hooks/usePost";
@@ -15,20 +15,31 @@ import useFetch from "@/hooks/useFetch";
 import { setCartItems } from "@/redux/cartSlice";
 import { toast } from "sonner";
 import { toastOptions } from "@/config/data";
+import StarRating from "../common-comps/StarRating";
+import { setReviews } from "@/redux/reviewSlice";
 
-const reviews = [
-  {
-    userName: "robin",
-  },
-  { userName: "peter" },
-];
-
+// ------ the component body --------
 const ShoppingProductDetails = ({ open, setOpen, productDetails }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { postData } = usePost();
   const { refetchData } = useFetch();
   const { cartItems } = useSelector((state) => state.cart);
+  const [rating, setRating] = useState(0);
+  const [reviewMsg, setReviewMsg] = useState("");
+  const { reviews } = useSelector((state) => state.reviews);
+  const { data } = useFetch(`review/${productDetails?._id}`);
+
+  useEffect(() => {
+    productDetails !== null && dispatch(setReviews({ data }));
+  }, [data]);
+
+  // calculating the average review
+  const averageReview =
+    reviews && reviews.length > 0
+      ? reviews.reduce((sum, reviewItem) => sum + reviewItem.reviewValue, 0) /
+        reviews.length
+      : 0;
 
   // adding product to the cart
   const handleAddToCart = async (id, totalStock) => {
@@ -74,6 +85,10 @@ const ShoppingProductDetails = ({ open, setOpen, productDetails }) => {
     dispatch(setProductDetails({ data: null }));
 
     setOpen(false);
+
+    setReviewMsg("");
+
+    setRating(0);
   };
 
   // opening the product details dialog
@@ -83,7 +98,29 @@ const ShoppingProductDetails = ({ open, setOpen, productDetails }) => {
     }
   }, [productDetails]);
 
-  // return the jsx
+  // function to change the rating
+  const handleRatingChange = (star) => {
+    setRating(star);
+  };
+
+  // function that add review
+  const handleAddReview = async () => {
+    const response = await postData(`review/add`, {
+      productId: productDetails?._id,
+      userId: user?._id,
+      userName: user?.userName,
+      reviewMessage: reviewMsg,
+      reviewValue: rating,
+    });
+
+    const { data } = response;
+
+    const updatedReviews = [...reviews, data];
+
+    dispatch(setReviews({ data: updatedReviews }));
+    handleDialogClose();
+  };
+  // -------- return the jsx --------
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
@@ -122,7 +159,7 @@ const ShoppingProductDetails = ({ open, setOpen, productDetails }) => {
           <div className="flex items-center gap-2 mt-2">
             <div className="flex items-center gap-0.5">star rating compo</div>
             <span className="text-muted-foreground">
-              {/* ({averageReview.toFixed(2)}) */}
+              ({averageReview.toFixed(2)})
             </span>
           </div>
           <div className="mt-5 mb-5">
@@ -145,8 +182,11 @@ const ShoppingProductDetails = ({ open, setOpen, productDetails }) => {
             )}
           </div>
           <Separator />
+
+          {/* ---------- review section --------- */}
           <div className="max-h-[300px] overflow-auto">
             <h2 className="text-xl font-bold mb-4">Reviews</h2>
+
             <div className="grid gap-6">
               {reviews && reviews.length > 0 ? (
                 reviews.map((reviewItem) => (
@@ -161,7 +201,7 @@ const ShoppingProductDetails = ({ open, setOpen, productDetails }) => {
                         <h3 className="font-bold">{reviewItem?.userName}</h3>
                       </div>
                       <div className="flex items-center gap-0.5">
-                        {/* <StarRatingComponent rating={reviewItem?.reviewValue} /> */}
+                        <StarRating rating={reviewItem?.reviewValue} />
                       </div>
                       <p className="text-muted-foreground">
                         {reviewItem.reviewMessage}
@@ -173,23 +213,25 @@ const ShoppingProductDetails = ({ open, setOpen, productDetails }) => {
                 <h1>No Reviews</h1>
               )}
             </div>
+
+            {/* ---------- review writing input --------- */}
             <div className="mt-10 flex-col flex gap-2">
               <Label>Write a review</Label>
               <div className="flex gap-1">
-                {/* <StarRatingComponent
+                <StarRating
                   rating={rating}
                   handleRatingChange={handleRatingChange}
-                /> */}
+                />
               </div>
               <Input
                 name="reviewMsg"
-                // value={reviewMsg}
-                // onChange={(event) => setReviewMsg(event.target.value)}
+                value={reviewMsg}
+                onChange={(event) => setReviewMsg(event.target.value)}
                 placeholder="Write a review..."
               />
               <Button
-              // onClick={handleAddReview}
-              // disabled={reviewMsg.trim() === ""}
+                onClick={handleAddReview}
+                disabled={reviewMsg.trim() === ""}
               >
                 Submit
               </Button>

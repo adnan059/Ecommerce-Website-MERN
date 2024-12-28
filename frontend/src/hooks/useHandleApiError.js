@@ -15,7 +15,7 @@ const useHandleApiError = () => {
       toast.error("session expired. please log in", toastOptions);
       navigate("/auth/login");
     } else {
-      toast.error(errMsg);
+      toast.error(errMsg, toastOptions);
     }
   };
   return handleApiError;

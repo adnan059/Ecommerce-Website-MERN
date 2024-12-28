@@ -18,6 +18,7 @@ import shopSlice from "./shopSlice.js";
 import cartSlice from "./cartSlice.js";
 import addressSlice from "./addressSlice.js";
 import shoppingOrderSlice from "./shoppingOrderSlice.js";
+import reviewSlice from "./reviewSlice.js";
 
 const persistConfig = {
   key: "root",
@@ -33,6 +34,7 @@ const reducers = combineReducers({
   cart: cartSlice,
   address: addressSlice,
   shoppingOrder: shoppingOrderSlice,
+  reviews: reviewSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
