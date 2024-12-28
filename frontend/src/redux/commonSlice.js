@@ -14,7 +14,7 @@ const commonSlice = createSlice({
       state.loading = false;
     },
     setSearchResults: (state, action) => {
-      state.searchResults = action.payload.searchResults;
+      state.searchResults = action.payload.data;
     },
   },
 });
