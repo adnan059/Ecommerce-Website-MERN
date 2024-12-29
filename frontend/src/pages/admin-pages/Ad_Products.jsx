@@ -31,7 +31,7 @@ const initialFormData = {
   averageReview: 0,
 };
 
-// ------- Products component -------
+// ------- Products component body -------
 const Ad_Products = () => {
   const [openCreateProductsDialog, setOpenCreateProductsDialog] =
     useState(false);
@@ -46,6 +46,7 @@ const Ad_Products = () => {
   const { data } = useFetch(`products/all`);
   const [currentEditedId, setCurrentEditedId] = useState(null);
 
+  // setting the product list
   useEffect(() => {
     dispatch(setProductList({ data }));
   }, [data]);

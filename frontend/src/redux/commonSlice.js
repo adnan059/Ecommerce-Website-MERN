@@ -5,6 +5,7 @@ const commonSlice = createSlice({
   initialState: {
     loading: false,
     searchResults: [],
+    featureImageList: [],
   },
   reducers: {
     startLoading: (state) => {
@@ -16,10 +17,17 @@ const commonSlice = createSlice({
     setSearchResults: (state, action) => {
       state.searchResults = action.payload.data;
     },
+    setFeatureImageList: (state, action) => {
+      state.featureImageList = action.payload.data;
+    },
   },
 });
 
-export const { startLoading, endLoading, setSearchResults } =
-  commonSlice.actions;
+export const {
+  startLoading,
+  endLoading,
+  setSearchResults,
+  setFeatureImageList,
+} = commonSlice.actions;
 
 export default commonSlice.reducer;

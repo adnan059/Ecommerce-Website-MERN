@@ -20,7 +20,7 @@ const initialAddressFormData = {
   notes: "",
 };
 
-const ShoppingAddress = ({ setCurrentSelectedAddress }) => {
+const ShoppingAddress = ({ setCurrentSelectedAddress, selectedId }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const { loading } = useSelector((state) => state.common);
   const { user } = useSelector((state) => state.auth);
@@ -86,6 +86,7 @@ const ShoppingAddress = ({ setCurrentSelectedAddress }) => {
                 setCurrentEditedId={setCurrentEditedId}
                 formData={formData}
                 setCurrentSelectedAddress={setCurrentSelectedAddress}
+                selectedId={selectedId}
               />
             ))
           : null}

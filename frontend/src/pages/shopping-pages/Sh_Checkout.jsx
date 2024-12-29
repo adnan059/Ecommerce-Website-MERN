@@ -75,7 +75,6 @@ const Sh_Checkout = () => {
       payerId: "",
     };
 
-    // console.log(orderData);
     const response = await postData(`order/create`, orderData);
 
     dispatch(
@@ -99,15 +98,22 @@ const Sh_Checkout = () => {
     }
   }, [approvalURL]);
 
+  // return the jsx
   return (
     <div className="flex flex-col">
+      {/* --- image part --- */}
       <div className="relative h-[300px] w-full overflow-hidden">
         <img src={img} className="h-full w-full object-cover object-center" />
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5">
+        {/* --- address part --- */}
         <ShoppingAddress
           setCurrentSelectedAddress={setCurrentSelectedAddress}
+          selectedId={currentSelectedAddress}
         />
+
+        {/* --- cart part --- */}
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.length > 0
             ? cartItems.map((item) => (

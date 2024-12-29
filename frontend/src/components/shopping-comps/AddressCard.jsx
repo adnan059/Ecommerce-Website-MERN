@@ -10,12 +10,14 @@ import { setAddressList } from "@/redux/addressSlice";
 import { toast } from "sonner";
 import { toastOptions } from "@/config/data";
 
+// Address card component body
 const AddressCard = ({
   addressInfo,
   setFormData,
   setCurrentEditedId,
   formData,
   setCurrentSelectedAddress,
+  selectedId,
 }) => {
   const { addressList } = useSelector((state) => state.address);
   const { user } = useSelector((state) => state.auth);
@@ -24,6 +26,9 @@ const AddressCard = ({
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
+  const { _id: chosenAddressId } = selectedId;
+
+  // function that handles the deletion of an address
   const handleDeleteAddress = async () => {
     const response = await deleteData(
       `address/delete/${user?._id}/${addressInfo?._id}`
@@ -42,6 +47,7 @@ const AddressCard = ({
     return;
   };
 
+  // function that handles the updating of an address
   const handleEditAddress = async (addressInfo) => {
     setCurrentEditedId(addressInfo?._id);
     setFormData({
@@ -53,16 +59,32 @@ const AddressCard = ({
       notes: addressInfo?.notes,
     });
   };
+
+  console.log(selectedId?._id);
+
+  // ------ return the jsx -------
   return (
     <Fragment>
       <Card
+        className={`${
+          chosenAddressId === addressInfo?._id ? "bg-green-200" : ""
+        } grid p-4 gap-4 cursor-pointer`}
         onClick={
           setCurrentSelectedAddress
-            ? () => setCurrentSelectedAddress(addressInfo)
+            ? () => {
+                setCurrentSelectedAddress(addressInfo);
+              }
             : null
         }
       >
-        <CardContent className="grid p-4 gap-4">
+        <CardContent>
+          <Button
+            className={`block mb-6 mx-auto ${
+              chosenAddressId === addressInfo?._id ? "bg-green-800" : ""
+            }`}
+          >{`${
+            chosenAddressId === addressInfo?._id ? "Selected" : "Select"
+          }`}</Button>
           <Label>Address: {addressInfo?.address}</Label>
           <Label>City: {addressInfo?.city}</Label>
           <Label>Pincode: {addressInfo?.pincode}</Label>

@@ -23,6 +23,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutAction } from "@/redux/authSlice";
 import { useState } from "react";
 import UserCartWrapper from "./CartWrapper";
+import { setCartItems } from "@/redux/cartSlice";
 
 const MenuItems = () => {
   const navigate = useNavigate();
@@ -65,6 +66,14 @@ const HeaderRightContent = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [openCartSheet, setOpenCartSheet] = useState(false);
+  const { cartItems } = useSelector((state) => state.cart);
+
+  const handleLogout = () => {
+    dispatch(logoutAction());
+    dispatch(setCartItems({ data: [], cartId: null }));
+  };
+
+  // return the jsx
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
@@ -75,6 +84,9 @@ const HeaderRightContent = () => {
           className="relative"
         >
           <ShoppingCart className="w-6 h-6" />
+          <span className="absolute top-[-5px] right-[2px] font-bold text-red-600 text-sm">
+            {cartItems?.length || 0}
+          </span>
           <span className="sr-only">user cart</span>
         </Button>
         <UserCartWrapper setOpenCartSheet={setOpenCartSheet} />
@@ -95,7 +107,7 @@ const HeaderRightContent = () => {
             Account
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => dispatch(logoutAction())}>
+          <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
             Logout
           </DropdownMenuItem>

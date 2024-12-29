@@ -8,7 +8,7 @@ const imageUploadCtrl = async (req, res, next) => {
     const url = "data:" + req.file.mimetype + ";base64," + b64;
     const result = await imageUploadUtil(url);
 
-    res.status(200).json({ succes: true, result });
+    res.status(200).json({ success: true, result });
   } catch (error) {
     next(error);
   }

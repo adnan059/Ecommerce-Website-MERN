@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoute from "./components/auth-comps/PublicRoute";
 import Login from "./pages/auth-pages/Login";
 import Register from "./pages/auth-pages/Register";
@@ -23,7 +23,7 @@ const Ecom = () => {
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Routes>
-        <Route path="/" element={<h1>Home</h1>} />
+        <Route path="/" element={<Navigate to={"/shop/home"} />} />
 
         {/* --- auth routes --- */}
         <Route path="/auth" element={<PublicRoute />}>
