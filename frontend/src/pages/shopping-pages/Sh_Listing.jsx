@@ -23,6 +23,7 @@ const Sh_Listing = () => {
   const { sh_productList, sh_productDetails } = useSelector(
     (state) => state.shop
   );
+  const [loading, setLoading] = useState(false);
   const { data, refetchData } = useFetch(`shop/products`);
   const dispatch = useDispatch();
   const [filters, setFilters] = useState({});
@@ -58,8 +59,10 @@ const Sh_Listing = () => {
       sortBy: sort,
     });
     const fetchData = async () => {
+      setLoading(true);
       const response = await refetchData("shop/products", query);
 
+      setLoading(false);
       dispatch(setAllFilteredProducts({ data: response?.data }));
     };
 
@@ -95,11 +98,11 @@ const Sh_Listing = () => {
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
   };
 
-  // if (loading) {
-  //   return (
-  //     <h1 className="text-center text-3xl font-bold mt-10">Loading ...</h1>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <h1 className="text-center text-3xl font-bold mt-10">Loading ...</h1>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">

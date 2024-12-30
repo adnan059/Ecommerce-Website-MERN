@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import { toast } from "sonner";
-import { useDispatch, useSelector } from "react-redux";
+
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { baseUrl } from "@/config/data";
-import { endLoading, startLoading } from "@/redux/commonSlice";
+
 import { Skeleton } from "../ui/skeleton";
 import useHandleApiError from "@/hooks/useHandleApiError";
 
@@ -22,14 +22,13 @@ const AdminImageUpload = ({
 }) => {
   const inputRef = useRef(null);
   const { token } = useSelector((state) => state.auth);
-  const { loading } = useSelector((state) => state.common);
-  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
   const handleApiError = useHandleApiError();
 
   // the function that handles the file change
   const handleImageFileChange = (event) => {
     const selectedFile = event.target.files?.[0];
-    console.log(selectedFile);
     setImageFile(selectedFile);
   };
 
@@ -64,7 +63,7 @@ const AdminImageUpload = ({
       `${imageFile.name.slice(0, 5)}_${Date.now()}`
     );
 
-    dispatch(startLoading());
+    setLoading(true);
     try {
       const response = await axios.post(
         `${baseUrl}/products/upload-image`,
@@ -72,14 +71,11 @@ const AdminImageUpload = ({
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      console.log(response);
-
       setUploadedImageUrl(response.data.result.url);
-
-      dispatch(endLoading());
+      setLoading(false);
     } catch (error) {
       handleApiError(error);
-      dispatch(endLoading());
+      setLoading(false);
     }
   };
 

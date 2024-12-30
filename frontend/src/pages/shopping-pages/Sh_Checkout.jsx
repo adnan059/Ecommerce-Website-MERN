@@ -110,7 +110,7 @@ const Sh_Checkout = () => {
         {/* --- address part --- */}
         <ShoppingAddress
           setCurrentSelectedAddress={setCurrentSelectedAddress}
-          selectedId={currentSelectedAddress}
+          currentSelectedAddress={currentSelectedAddress}
         />
 
         {/* --- cart part --- */}

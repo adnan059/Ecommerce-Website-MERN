@@ -14,19 +14,19 @@ import usePost from "@/hooks/usePost";
 import { setCartItems } from "@/redux/cartSlice";
 import { toast } from "sonner";
 import { setProductDetails } from "@/redux/shopSlice";
+import { useState } from "react";
 
 /* eslint-disable react/prop-types */
 const ShoppingProductTile = ({ product }) => {
   const { refetchData } = useFetch();
-  const { loading, postData } = usePost();
+  const { postData } = usePost();
+  const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
 
   // adding products to cart
   const handleAddtoCart = async (id, totalStock) => {
-    console.log(cartItems);
-
     if (cartItems.length) {
       const indexOfCurrentItem = cartItems.findIndex(
         (item) => item.productId === id
@@ -46,11 +46,15 @@ const ShoppingProductTile = ({ product }) => {
       }
     }
 
+    setLoading(true);
+
     await postData(`cart/add`, {
       userId: user?._id,
       productId: id,
       quantity: 1,
     });
+
+    setLoading(false);
 
     const response = await refetchData(`cart/get/${user?._id}`);
 
@@ -62,7 +66,9 @@ const ShoppingProductTile = ({ product }) => {
 
   // getting and setting product details
   const handleGetProductDetails = async (id) => {
+    setLoading(true);
     const response = await refetchData(`shop/products/${id}`);
+    setLoading(false);
     dispatch(setProductDetails({ data: response?.data }));
   };
 

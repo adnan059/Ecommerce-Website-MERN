@@ -20,9 +20,13 @@ const initialAddressFormData = {
   notes: "",
 };
 
-const ShoppingAddress = ({ setCurrentSelectedAddress, selectedId }) => {
+// component body
+const ShoppingAddress = ({
+  setCurrentSelectedAddress,
+  currentSelectedAddress,
+}) => {
   const [formData, setFormData] = useState(initialAddressFormData);
-  const { loading } = useSelector((state) => state.common);
+  const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { postData } = usePost();
@@ -31,16 +35,19 @@ const ShoppingAddress = ({ setCurrentSelectedAddress, selectedId }) => {
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const { updateData } = usePut();
 
+  // useeffect to set address list
   useEffect(() => {
     dispatch(setAddressList({ data: data }));
   }, [data]);
 
+  // function that manages create or edit address
   const handleManageAddress = async (event) => {
     event.preventDefault();
     if (addressList.length >= 3 && currentEditedId === null) {
       toast.warning("you cannot add more than three addresses", toastOptions);
       return;
     }
+    setLoading(true);
     const response = currentEditedId
       ? await updateData(
           `address/update/${user?._id}/${currentEditedId}`,
@@ -51,6 +58,7 @@ const ShoppingAddress = ({ setCurrentSelectedAddress, selectedId }) => {
           userId: user?._id,
         });
 
+    setLoading(false);
     const { data } = response;
 
     let updatedAddressList = addressList.filter(
@@ -74,6 +82,7 @@ const ShoppingAddress = ({ setCurrentSelectedAddress, selectedId }) => {
     setFormData(initialAddressFormData);
   };
 
+  // return the jsx
   return (
     <Card>
       <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2  gap-2">
@@ -86,7 +95,7 @@ const ShoppingAddress = ({ setCurrentSelectedAddress, selectedId }) => {
                 setCurrentEditedId={setCurrentEditedId}
                 formData={formData}
                 setCurrentSelectedAddress={setCurrentSelectedAddress}
-                selectedId={selectedId}
+                currentSelectedAddress={currentSelectedAddress}
               />
             ))
           : null}

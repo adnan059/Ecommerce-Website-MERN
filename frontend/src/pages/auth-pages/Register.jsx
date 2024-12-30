@@ -1,9 +1,9 @@
 import CommonForm from "@/components/common-comps/CommonForm";
 import { baseUrl, registerFormControls, toastOptions } from "@/config/data";
 import { registerAction } from "@/redux/authSlice";
-import { endLoading, startLoading } from "@/redux/commonSlice";
+
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -17,7 +17,7 @@ const initialState = {
 // --------- Register component -------------
 const Register = () => {
   const [formData, setFormData] = useState(initialState);
-  const { loading } = useSelector((state) => state.common);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,26 +29,25 @@ const Register = () => {
       toast.error("All the fields are required.", toastOptions);
       return;
     }
-    dispatch(startLoading());
+
+    setLoading(true);
     try {
       const { data } = await axios.post(`${baseUrl}/auth/register`, formData);
 
       const { token, ...others } = data;
 
       dispatch(registerAction({ token, others }));
-
-      dispatch(endLoading());
+      setLoading(false);
 
       toast.success("registration successful", toastOptions);
 
       navigate("/");
     } catch (error) {
-      console.log(error);
       toast.error(
         error.response.data.message || "registration failed!",
         toastOptions
       );
-      dispatch(endLoading());
+      setLoading(false);
     }
   };
 

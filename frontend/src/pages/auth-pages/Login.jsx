@@ -1,7 +1,7 @@
 import CommonForm from "@/components/common-comps/CommonForm";
 import { baseUrl, loginFormControls, toastOptions } from "@/config/data";
 import { loginAction } from "@/redux/authSlice";
-import { endLoading, startLoading } from "@/redux/commonSlice";
+
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,7 @@ const initialState = {
 // -------- Login component --------
 const Login = () => {
   const [formData, setFormData] = useState(initialState);
-  const { loading } = useSelector((state) => state.common);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,18 +27,20 @@ const Login = () => {
       toast.error("all the fields are required", toastOptions);
       return;
     }
-    dispatch(startLoading());
+
+    setLoading(true);
     try {
       const { data } = await axios.post(`${baseUrl}/auth/login`, formData);
       const { token, ...others } = data;
       dispatch(loginAction({ token, others }));
 
+      setLoading(false);
       toast.success("login successful", toastOptions);
-      dispatch(endLoading());
+
       navigate("/");
     } catch (error) {
       toast.error(error.response.data.message || "login failed", toastOptions);
-      dispatch(endLoading());
+      setLoading(false);
     }
   };
 

@@ -36,7 +36,7 @@ const Ad_Products = () => {
   const [openCreateProductsDialog, setOpenCreateProductsDialog] =
     useState(false);
   const [formData, setFormData] = useState(initialFormData);
-  const { loading } = useSelector((state) => state.common);
+  const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const { postData } = usePost();
@@ -54,12 +54,15 @@ const Ad_Products = () => {
   // ---- handle create or update product ----
   const onSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const response = currentEditedId
-      ? await updateData("products/edit", currentEditedId, formData)
+      ? await updateData(`products/edit/${currentEditedId}`, formData)
       : await postData("products/add", {
           ...formData,
           image: uploadedImageUrl,
         });
+
+    setLoading(false);
 
     const { data } = response;
 

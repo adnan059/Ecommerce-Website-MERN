@@ -15,16 +15,16 @@ const Sh_Search = () => {
   const { user } = useSelector((state) => state.auth);
   const [keyword, setKeyword] = useState("");
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const { sh_productDetails } = useSelector((state) => state.shop);
 
   useEffect(() => {
     if (keyword && keyword.trim() !== "" && keyword.trim().length > 2) {
       setTimeout(async () => {
         setSearchParams(new URLSearchParams(`?keyword=${keyword}`));
-
+        setLoading(true);
         const { data } = await refetchData(`products/search/${keyword}`);
-        console.log(data);
+        setLoading(false);
         dispatch(setSearchResults({ data }));
       }, 1000);
     } else {
@@ -38,6 +38,11 @@ const Sh_Search = () => {
   }, [sh_productDetails]);
 
   // -------- return the jsx ----------
+  if (loading) {
+    return (
+      <h1 className="text-center text-3xl font-bold mt-10">Loading ...</h1>
+    );
+  }
   return (
     <div className="container mx-auto md:px-6 px-4 py-8">
       <div className="flex justify-center mb-8">

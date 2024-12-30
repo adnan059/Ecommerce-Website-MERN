@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Label } from "../ui/label";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import DeleteConfirmation from "../common-comps/DeleteConfirmation";
 import useDelete from "@/hooks/useDelete";
 import { setAddressList } from "@/redux/addressSlice";
@@ -17,16 +17,16 @@ const AddressCard = ({
   setCurrentEditedId,
   formData,
   setCurrentSelectedAddress,
-  selectedId,
+  currentSelectedAddress,
 }) => {
   const { addressList } = useSelector((state) => state.address);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const deleteData = useDelete();
-
+  const [chosenAddressId, setChosenAddressId] = useState(
+    currentSelectedAddress?._id
+  );
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-  const { _id: chosenAddressId } = selectedId;
 
   // function that handles the deletion of an address
   const handleDeleteAddress = async () => {
@@ -60,7 +60,9 @@ const AddressCard = ({
     });
   };
 
-  console.log(selectedId?._id);
+  useEffect(() => {
+    setChosenAddressId(currentSelectedAddress?._id);
+  }, [currentSelectedAddress]);
 
   // ------ return the jsx -------
   return (
@@ -69,16 +71,16 @@ const AddressCard = ({
         className={`${
           chosenAddressId === addressInfo?._id ? "bg-green-200" : ""
         } grid p-4 gap-4 cursor-pointer`}
-        onClick={
-          setCurrentSelectedAddress
-            ? () => {
-                setCurrentSelectedAddress(addressInfo);
-              }
-            : null
-        }
       >
         <CardContent>
           <Button
+            onClick={
+              setCurrentSelectedAddress
+                ? () => {
+                    setCurrentSelectedAddress(addressInfo);
+                  }
+                : null
+            }
             className={`block mb-6 mx-auto ${
               chosenAddressId === addressInfo?._id ? "bg-green-800" : ""
             }`}

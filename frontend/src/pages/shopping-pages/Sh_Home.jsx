@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner-1.webp";
-import bannerTwo from "../../assets/banner-2.webp";
-import bannerThree from "../../assets/banner-3.webp";
+import bannerOne from "../../assets/banner-1.jpg";
+import bannerTwo from "../../assets/banner-2.jpg";
+import bannerThree from "../../assets/banner-3.jpg";
 import {
   Airplay,
   BabyIcon,
@@ -91,14 +91,14 @@ const Sh_Home = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="relative w-full h-[600px] overflow-hidden">
+      <div className="relative w-full h-[600px] overflow-hidden bg-[#05617a]">
         {slides.map((slide, i) => (
           <img
             src={slide}
             key={i}
             className={`${
               i === currentSlide ? "opacity-100" : "opacity-0"
-            } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
+            } absolute top-0 left-0 w-full h-full object-contain transition-opacity duration-1000`}
           />
         ))}
         <Button
