@@ -71,7 +71,7 @@ const Sh_Home = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 25000000);
+    }, 3000);
 
     return () => clearInterval(timer);
   }, []);
