@@ -24,6 +24,7 @@ const initialAddressFormData = {
 const ShoppingAddress = ({
   setCurrentSelectedAddress,
   currentSelectedAddress,
+  fromCheckout,
 }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const [loading, setLoading] = useState(false);
@@ -96,6 +97,7 @@ const ShoppingAddress = ({
                 formData={formData}
                 setCurrentSelectedAddress={setCurrentSelectedAddress}
                 currentSelectedAddress={currentSelectedAddress}
+                fromCheckout={fromCheckout}
               />
             ))
           : null}

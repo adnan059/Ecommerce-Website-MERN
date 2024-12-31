@@ -18,6 +18,7 @@ const AddressCard = ({
   formData,
   setCurrentSelectedAddress,
   currentSelectedAddress,
+  fromCheckout,
 }) => {
   const { addressList } = useSelector((state) => state.address);
   const { user } = useSelector((state) => state.auth);
@@ -73,20 +74,22 @@ const AddressCard = ({
         } grid p-4 gap-4 cursor-pointer`}
       >
         <CardContent>
-          <Button
-            onClick={
-              setCurrentSelectedAddress
-                ? () => {
-                    setCurrentSelectedAddress(addressInfo);
-                  }
-                : null
-            }
-            className={`block mb-6 mx-auto ${
-              chosenAddressId === addressInfo?._id ? "bg-green-800" : ""
-            }`}
-          >{`${
-            chosenAddressId === addressInfo?._id ? "Selected" : "Select"
-          }`}</Button>
+          {fromCheckout && (
+            <Button
+              onClick={
+                setCurrentSelectedAddress
+                  ? () => {
+                      setCurrentSelectedAddress(addressInfo);
+                    }
+                  : null
+              }
+              className={`block mb-6 mx-auto ${
+                chosenAddressId === addressInfo?._id ? "bg-green-800" : ""
+              }`}
+            >{`${
+              chosenAddressId === addressInfo?._id ? "Selected" : "Select"
+            }`}</Button>
+          )}
           <Label>Address: {addressInfo?.address}</Label>
           <Label>City: {addressInfo?.city}</Label>
           <Label>Pincode: {addressInfo?.pincode}</Label>

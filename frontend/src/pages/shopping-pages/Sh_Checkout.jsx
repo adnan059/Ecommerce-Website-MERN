@@ -111,6 +111,7 @@ const Sh_Checkout = () => {
         <ShoppingAddress
           setCurrentSelectedAddress={setCurrentSelectedAddress}
           currentSelectedAddress={currentSelectedAddress}
+          fromCheckout={true}
         />
 
         {/* --- cart part --- */}
@@ -128,7 +129,7 @@ const Sh_Checkout = () => {
           </div>
           <div className="mt-4 w-full">
             <Button
-              disabled={cartItems.length > 0 ? false : true}
+              disabled={cartItems.length < 1 || isPaymentStart}
               onClick={handleInitiatePaypalPayment}
               className="w-full"
             >

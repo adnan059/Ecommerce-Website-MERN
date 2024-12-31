@@ -133,6 +133,10 @@ const HeaderRightContent = () => {
 const ShoppingHeader = () => {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
+      <h2 className="bg-[#05617a] text-white text-center py-2">
+        This website has been created only for practising web development. This
+        is not a real ecommerce website.
+      </h2>
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-2">
           <HousePlug className="h-6 w-6" />
