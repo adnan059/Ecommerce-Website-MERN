@@ -18,6 +18,7 @@ const featureRoutes = require("./routes/featureRoutes");
 
 const PORT = process.env.PORT;
 const DB_URL = process.env.DB_URL;
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
 
 // -----------------------------------
 
@@ -38,7 +39,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: CLIENT_BASE_URL,
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",

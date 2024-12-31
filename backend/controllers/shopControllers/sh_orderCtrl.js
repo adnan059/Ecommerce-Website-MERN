@@ -4,6 +4,10 @@ const Product = require("../../models/Product");
 const createError = require("../../utils/createError");
 const { paypal } = require("../../utils/helpers");
 
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
+const PAYPAL_RETURN_URL = process.env.PAYPAL_RETURN_URL;
+const PAYPAL_CANCEL_URL = process.env.PAYPAL_CANCEL_URL;
+
 // create an order
 const createOrder = async (req, res, next) => {
   try {
@@ -28,8 +32,8 @@ const createOrder = async (req, res, next) => {
         payment_method: "paypal",
       },
       redirect_urls: {
-        return_url: process.env.PAYPAL_RETURN_URL,
-        cancel_url: process.env.PAYPAL_CANCEL_URL,
+        return_url: `${CLIENT_BASE_URL + PAYPAL_RETURN_URL}`,
+        cancel_url: `${CLIENT_BASE_URL + PAYPAL_CANCEL_URL}`,
       },
       transactions: [
         {
