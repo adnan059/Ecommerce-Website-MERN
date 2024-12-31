@@ -3,9 +3,9 @@ const multer = require("multer");
 const paypal = require("paypal-rest-sdk");
 
 cloudinary.config({
-  cloud_name: "diwpwlzg5",
-  api_key: "764592342164522",
-  api_secret: "7a3AFe9fxj1dl-pRf02z6MWO8PE",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
 });
 
 const storage = new multer.memoryStorage();
