@@ -42,13 +42,13 @@ const loginCtrl = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      return next(createError(401, "user not found"));
+      return next(createError(401, "wrong credentials"));
     }
 
     const isValidPswd = await bcrypt.compare(req.body.password, user.password);
 
     if (!isValidPswd) {
-      return next(createError(401, "wrong password"));
+      return next(createError(401, "wrong credentials"));
     }
 
     const { _id, password, isAdmin, ...others } = user._doc;
